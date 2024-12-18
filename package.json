@@ -1,0 +1,17 @@
+{
+  "name": "np-overflow-open-house",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.171.0",
+    "vite": "^6.0.3"
+  }
+}
