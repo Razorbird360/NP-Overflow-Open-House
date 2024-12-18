@@ -29,23 +29,35 @@ scene.add(plane);
 const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1);
 scene.add(ambientLight);
 
+const initModel = async () => {
+  //leonard GLTF
+  const loader = new GLTFLoader();
+  const leonard = await loader.loadAsync(
+    '/resources/leonard/leonard_animated.glb',
+  );
 
-//leonard GLTF
-const loader = new GLTFLoader();
-loader.load(
-  '/resources/leonard/leonard_animated.glb', 
-  function (gltf) {
-    const guy = gltf.scene;
-    scene.add(guy);
-    gltf.scene.scale.set(1, 1, 1);
-    gltf.scene.position.set(0, 0, 0);
-  }
-);
+  const guy = leonard.scene;
+  scene.add(guy);
+  leonard.scene.scale.set(1, 1, 1);
+  leonard.scene.position.set(0, 0, 0);
+}
+
+initModel().then(() => {});
 
 camera.position.z = 5;
 
+// this sets the maximum fps to 60 regardless of the computer refresh rate.
+const fps = 60;
+const interval = 1000 / fps;
+let lastTime = 0;
+
 function animate() {
   requestAnimationFrame(animate);
-  renderer.render(scene, camera);
+  const time = Date.now()
+  if (time - lastTime >= interval) {
+    lastTime = time;
+    renderer.render(scene, camera);
+  }
 }
-renderer.setAnimationLoop(animate);
+
+renderer.setAnimationLoop(animate)
