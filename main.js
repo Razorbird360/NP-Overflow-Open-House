@@ -292,7 +292,7 @@ function onkeyup(event) {
     return;
   }
 
-  mixer.stopAllAction();
+  // mixer.stopAllAction();
 
   switch (event.key.toLowerCase()) {
     case 'w':
@@ -320,15 +320,15 @@ function onkeyup(event) {
 
 //calls the playanimation function based on the keys pressed
 function character_movement() {
-  if (keys.shift && (keys.w || keys.a || keys.s || keys.d)) {
+  if (keys.shift) {
     playanimation("run");
+    return
   } 
-  else if (keys.w || keys.a || keys.s || keys.d) {
+  if (keys.w || keys.a || keys.s || keys.d) {
     playanimation("walk");
+    return;
   } 
-  else {
-    playanimation("idle");
-  }
+  playanimation("idle");
 }
 
 
