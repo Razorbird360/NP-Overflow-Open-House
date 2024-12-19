@@ -173,67 +173,39 @@ function playanimation(event) {
   if (!mixer) {
     return;
   }
+  let targetAction;
 
   switch (event) {
     case 'idle':
-      if (currentaction === animations.idle) {
-        return;
-      }
-      currentaction = animations.idle;
-
-      currentaction.time = 0.0;
-      currentaction.setEffectiveTimeScale(1.0);
-      currentaction.setEffectiveWeight(1.0);
-      currentaction.play();
-      currentaction.clampWhenFinished = true;
-      
-      if (prevaction && prevaction !== currentaction) {
-        prevaction.time = currentaction.time;
-        currentaction.crossFadeFrom(prevaction, 0.5, true);
-      }
-      prevaction = currentaction;
+      targetAction = animations.idle;
       break;
-
     case 'walk':
-      if (currentaction === animations.walk) {
-        return;
-      }
-      currentaction = animations.walk;
-
-      currentaction.time = 0.0;
-      currentaction.setEffectiveTimeScale(1.0);
-      currentaction.setEffectiveWeight(1.0);
-      currentaction.play();
-      currentaction.clampWhenFinished = true;
-
-      if (prevaction && prevaction !== currentaction) {
-        prevaction.time = currentaction.time;
-        currentaction.crossFadeFrom(prevaction, 0.5, true);
-      }
-      prevaction = currentaction;
+      targetAction = animations.walk;
       break;
-    
     case 'run':
-      if (currentaction === animations.run) {
-        return;
-      }
-      currentaction = animations.run;
-
-      currentaction.time = 0.0;
-      currentaction.setEffectiveTimeScale(1.0);
-      currentaction.setEffectiveWeight(1.0);
-      currentaction.play();
-      currentaction.clampWhenFinished = true;
-
-      if (prevaction && prevaction !== currentaction) {
-        prevaction.time = currentaction.time;
-        currentaction.crossFadeFrom(prevaction, 0.5, true);
-      }
-      prevaction = currentaction;
+      targetAction = animations.run;
       break;
+    default:
+      return;
   }
 
-  
+  if (currentaction === targetAction) {
+    return;
+  }
+
+  targetAction.reset();
+  targetAction.setEffectiveTimeScale(1.0);
+  targetAction.setEffectiveWeight(1.0);
+  targetAction.clampWhenFinished = true;
+
+  if (currentaction) {
+    targetAction.crossFadeFrom(currentaction, 0.5, true);
+  }
+
+  targetAction.play();
+
+  prevaction = currentaction;
+  currentaction = targetAction;
 }
 
 
@@ -251,7 +223,8 @@ function onkeydown(event) {
   if (!character) {
     return;
   }
-  else if (!mixer) {
+
+  if (!mixer) {
     return;
   }
 
@@ -288,11 +261,12 @@ function onkeyup(event) {
   if (!character) {
     return;
   }
-  else if (!mixer) {
+
+  if (!mixer) {
     return;
   }
 
-  mixer.stopAllAction();
+  // mixer.stopAllAction();
 
   switch (event.key.toLowerCase()) {
     case 'w':
@@ -320,15 +294,15 @@ function onkeyup(event) {
 
 //calls the playanimation function based on the keys pressed
 function character_movement() {
-  if (keys.shift && (keys.w || keys.a || keys.s || keys.d)) {
+  if (keys.shift) {
     playanimation("run");
+    return
   } 
-  else if (keys.w || keys.a || keys.s || keys.d) {
+  if (keys.w || keys.a || keys.s || keys.d) {
     playanimation("walk");
+    return;
   } 
-  else {
-    playanimation("idle");
-  }
+  playanimation("idle");
 }
 
 
