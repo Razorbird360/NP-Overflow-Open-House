@@ -16,19 +16,49 @@ document.body.appendChild(renderer.domElement);
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 6, 7);
 
+const listener = new THREE.AudioListener();
+camera.add(listener);
+
 const controls = new OrbitControls(camera, renderer.domElement);
 
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
-const planeGeometry = new THREE.PlaneGeometry(30, 30);
-const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, side: THREE.DoubleSide });
-const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-plane.rotation.x = Math.PI / 2;
-scene.add(plane);
-
 const ambientLight = new THREE.AmbientLight(0xFFFFFF, 3);
 scene.add(ambientLight);
+
+
+//https://threejs.org/docs/#api/en/constants/Textures
+const canvas = document.createElement('canvas');
+canvas.width = 1024;
+canvas.height = 1024; //canvas width and height define the resolution of the texture not the actual size of it as defined in planegeometry
+//gets the 2d rendering context of the canvas to draw on it
+const ctx = canvas.getContext('2d');
+
+//first 2 parameters are the x and y coordinates of the starting circle, 3rd parameter (0) is the radius of the starting circle and 4th parameter is the x coordinate of the ending circle
+const gradient = ctx.createRadialGradient(
+  canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2
+);
+gradient.addColorStop(0, '#5AC45A');
+gradient.addColorStop(0.3, '#228B22');
+
+//apply the gradient to the canvas and create texture
+ctx.fillStyle = gradient;
+ctx.fillRect(0, 0, canvas.width, canvas.height); //fills the canvas with the gradient completely
+const texture = new THREE.CanvasTexture(canvas);
+
+const planeGeometry = new THREE.PlaneGeometry(100, 100);
+const planeMaterial = new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.DoubleSide
+});
+const ground = new THREE.Mesh(planeGeometry, planeMaterial);
+ground.rotation.x = -Math.PI / 2;
+scene.add(ground);
+
+
+
+
 
 
 //load leonard GLB file and define animations
@@ -153,8 +183,10 @@ function face(direction) {
     }
   }
   
-  console.log(facing, character.rotation.y);
+  // console.log(facing, character.rotation.y);
 }
+
+
 
 
 
@@ -291,7 +323,8 @@ function onkeyup(event) {
 
 
 //character movement
-function move(speed) {
+//multiply speed and deltatime to ensure character moves at the same speed regardless of refresh rate (deltaTime is the time between current and previous frames)
+function move(speed, deltaTime) {
   const direction = new THREE.Vector3(
     Math.sin(character.rotation.y),
     0,
@@ -299,25 +332,65 @@ function move(speed) {
   );
 
   // Update character position
-  character.position.addScaledVector(direction.normalize(), speed);
+  character.position.addScaledVector(direction.normalize(), speed * deltaTime);
 }
 
+
+
+
+
+//https://threejs.org/docs/#api/en/audio/Audio
+const audioLoader = new THREE.AudioLoader();
+const walkingSound = new THREE.Audio(listener);
+
+audioLoader.load('/resources/Sounds/walkingSound.mp3', function(buffer) {
+  walkingSound.setBuffer(buffer);
+  walkingSound.setLoop(true);
+  walkingSound.setVolume(0.1);
+});
+
+const runningSound = new THREE.Audio(listener);
+
+audioLoader.load('/resources/Sounds/runningSound.mp3', function(buffer) {
+  runningSound.setBuffer(buffer);
+  runningSound.setLoop(true);
+  runningSound.setVolume(2);
+});
+
+
+
 //calls the playanimation function based on the keys pressed
-function character_movement() {
-  const walkingSpeed = 0.0001;
-  const runningSpeed = 0.0002;
+function character_movement(deltaTime) {
+  const walkingSpeed = 1;
+  const runningSpeed = 2.5;
 
   if (keys.shift) {
-    move(runningSpeed);
+    move(runningSpeed, deltaTime);
     playanimation("run");
-    return
+    if (walkingSound.isPlaying) {
+      walkingSound.stop();
+    }
+    if (!runningSound.isPlaying) {
+      runningSound.play();
+    }
+    return;
   } 
   if (keys.w || keys.a || keys.s || keys.d) {
-    move(walkingSpeed);
+    move(walkingSpeed, deltaTime);
     playanimation("walk");
+    if (runningSound.isPlaying) {
+      runningSound.stop();
+    }
+    if (!walkingSound.isPlaying) {
+      walkingSound.play();
+    }
     return;
   } 
   playanimation("idle");
+   if (walkingSound.isPlaying || runningSound.isPlaying) {
+    walkingSound.stop();
+    runningSound.stop();
+  }
 }
 
 
@@ -344,16 +417,15 @@ function animate() {
     renderer.render(scene, camera);
   }
 
+  const deltaTime = clock.getDelta();
+
   if (mixer) {
     //takes data from clock to display the correct animation frame
-    mixer.update(clock.getDelta());
+    mixer.update(deltaTime);
   }
 
-  if (!character) {
-    return;
-  }
-  else {
-    character_movement();
+  if (character) {
+    character_movement(deltaTime);
   }
 }
 
