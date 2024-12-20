@@ -163,11 +163,10 @@ function face(direction) {
 //animates character based on requested action
 //first sets the animation frame to 0, timescale (speed of animation) and weight (how much animation affects the character) to 1
 //then crossfades from the previous animation before updating previous animation
-let currentaction = animations.idle;
-let prevaction = null;
+let currentAction = animations.idle;
 function playanimation(event) {
   //code to display current action, uncomment for debugging
-  // const currentActionKey = Object.keys(animations).find(key => animations[key] === currentaction);
+  // const currentActionKey = Object.keys(animations).find(key => animations[key] === currentAction);
   // console.log(currentActionKey);
 
   if (!mixer) {
@@ -189,7 +188,7 @@ function playanimation(event) {
       return;
   }
 
-  if (currentaction === targetAction) {
+  if (currentAction === targetAction) {
     return;
   }
 
@@ -198,18 +197,15 @@ function playanimation(event) {
   targetAction.setEffectiveWeight(1.0);
   targetAction.clampWhenFinished = true;
 
-  if (currentaction) {
-    targetAction.crossFadeFrom(currentaction, 0.5, true);
+  if (currentAction) {
+    targetAction.crossFadeFrom(currentAction, 0.5, true);
   }
 
   targetAction.play();
-
-  prevaction = currentaction;
-  currentaction = targetAction;
+  currentAction = targetAction;
 }
 
 
-let moving = false;
 const keys = {
   w: false,
   a: false,
@@ -292,13 +288,32 @@ function onkeyup(event) {
 
 }
 
+
+
+//character movement
+function move(speed) {
+  const direction = new THREE.Vector3(
+    Math.sin(character.rotation.y),
+    0,
+    Math.cos(character.rotation.y)
+  );
+
+  // Update character position
+  character.position.addScaledVector(direction.normalize(), speed);
+}
+
 //calls the playanimation function based on the keys pressed
 function character_movement() {
+  const walkingSpeed = 0.0001;
+  const runningSpeed = 0.0002;
+
   if (keys.shift) {
+    move(runningSpeed);
     playanimation("run");
     return
   } 
   if (keys.w || keys.a || keys.s || keys.d) {
+    move(walkingSpeed);
     playanimation("walk");
     return;
   } 
@@ -308,6 +323,9 @@ function character_movement() {
 
 window.addEventListener('keydown', onkeydown);
 window.addEventListener('keyup', onkeyup);
+
+
+
 
 
 
@@ -331,8 +349,12 @@ function animate() {
     mixer.update(clock.getDelta());
   }
 
-  character_movement();
-
+  if (!character) {
+    return;
+  }
+  else {
+    character_movement();
+  }
 }
 
 renderer.setAnimationLoop(animate)
