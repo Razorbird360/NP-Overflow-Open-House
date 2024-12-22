@@ -1,7 +1,7 @@
 import * as THREE from 'three';
+import * as CANNON from 'cannon-es';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-// import { finite_state_machine } from './classes';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x808080);
@@ -53,7 +53,7 @@ const planeMaterial = new THREE.MeshBasicMaterial({
     side: THREE.DoubleSide
 });
 const ground = new THREE.Mesh(planeGeometry, planeMaterial);
-ground.rotation.x = -Math.PI / 2;
+ground.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
 scene.add(ground);
 
 
@@ -94,11 +94,10 @@ const initModel = async () => {
   animations.idle.play();
 }
 
-initModel().then(() => {});
+initModel().then(() => {}); 
 
 
 let facing = 'back';
-
 function face(direction) {
   if (facing === direction) {
     return;
@@ -124,6 +123,9 @@ function face(direction) {
 
   const rot = character.rotation.y;
   const pi = Math.PI;
+  // const euler = new THREE.Euler();
+  // let rot = euler.setFromQuaternion(characterBody.quaternion).y;
+
 
   //difference between current rotation rot and rotateto
   let difference = rotateto - rot;
@@ -131,13 +133,19 @@ function face(direction) {
   //ensures difference is between -pi and pi
   //when difference > pi, character should rotate to the left, opposite is true for difference < pi
   //subtract 2pi from difference to flip the direction of rotation
+
   if (difference > Math.PI) {
     difference -= 2 * Math.PI;
   } else if (difference <= -Math.PI) {
     difference += 2 * Math.PI;
   }
 
-  //find which direction to rotate to based on the difference 
+  // if (difference > 0) {
+  //   angle += 0.09;
+  // } else if (difference < 0) {
+  //   angle -= 0.09;
+  // }
+  // characterBody.quaternion.setFromEuler(0, angle, 0);
   if (difference > 0) {
     character.rotation.y += 0.09;
   } else {
@@ -152,6 +160,7 @@ function face(direction) {
   ) {
     facing = 'back';
     if (!(rot > -0.1 && rot < 0.1)) { //if character rotation is not in the middle range it will be defaulted to the middle range
+      // characterBody.quaternion.setFromEuler(0, 0, 0);
       character.rotation.y = 0;
     }
   } else if (
@@ -161,6 +170,7 @@ function face(direction) {
   ) {
     facing = 'front';
     if (!(rot > pi - 0.1 && rot < pi + 0.1)) {
+      // characterBody.quaternion.setFromEuler(0, Math.PI, 0);
       character.rotation.y = Math.PI;
     }
   } else if (
@@ -170,20 +180,22 @@ function face(direction) {
   ) {
     facing = 'right';
     if (!(rot > pi / 2 - 0.1 && rot < pi / 2 + 0.1)) {
+      // characterBody.quaternion.setFromEuler(0, pi / 2, 0);
       character.rotation.y = pi / 2;
     }
   } else if (
     (rot > -pi / 2 - 0.1 && rot < -pi / 2 + 0.1) ||
-    (rot > 3 * pi / 2 - 0.1 && rot < 3 * pi / 2 + 0.1) ||
+    (rot > 3 * pi / 2 - 0.1 && rot < 3 * pi / 2 + 0.1) || 
     (rot > -5 * pi / 2 - 0.1 && rot < -5 * pi / 2 + 0.1)
   ) {
     facing = 'left';
     if (!(rot > -pi / 2 - 0.1 && rot < -pi / 2 + 0.1)) {
+      // characterBody.quaternion.setFromEuler(0, -pi / 2, 0);
       character.rotation.y = -pi / 2;
     }
   }
   
-  // console.log(facing, character.rotation.y);
+  console.log(characterBody.position);
 }
 
 
@@ -331,8 +343,15 @@ function move(speed, deltaTime) {
     Math.cos(character.rotation.y)
   );
 
-  // Update character position
-  character.position.addScaledVector(direction.normalize(), speed * deltaTime);
+  direction.normalize();
+
+  characterBody.velocity.set(
+    direction.x * speed * deltaTime,
+    characterBody.velocity.y,
+    direction.z * speed * deltaTime
+  );
+  // const velocity = direction.normalize().multiplyScalar(speed * deltaTime);
+  // characterBody.velocity.set(velocity.x, characterBody.velocity.y, velocity.z);
 }
 
 
@@ -360,9 +379,9 @@ audioLoader.load('/resources/Sounds/runningSound.mp3', function(buffer) {
 
 
 //calls the playanimation function based on the keys pressed
-function character_movement(deltaTime) {
-  const walkingSpeed = 1;
-  const runningSpeed = 2.5;
+function characterMovement(deltaTime) {
+  const walkingSpeed = 150;
+  const runningSpeed = 300;
 
   if (keys.shift) {
     move(runningSpeed, deltaTime);
@@ -385,7 +404,7 @@ function character_movement(deltaTime) {
       walkingSound.play();
     }
     return;
-  } 
+  }
   playanimation("idle");
    if (walkingSound.isPlaying || runningSound.isPlaying) {
     walkingSound.stop();
@@ -398,6 +417,91 @@ window.addEventListener('keydown', onkeydown);
 window.addEventListener('keyup', onkeyup);
 
 
+
+//https://stackoverflow.com/questions/68181912/using-physics-with-an-imported-model-in-three-js
+const world = new CANNON.World({
+  gravity: new CANNON.Vec3(0, -9.81, 0)
+});
+
+//physical body of ground
+const groundMat = new CANNON.Material();
+const groundBody = new CANNON.Body({
+  shape: new CANNON.Plane(),
+  type: CANNON.Body.STATIC,
+  material: groundMat
+});
+groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+world.addBody(groundBody);
+
+
+
+//physical body of character
+//threejs mesh below is visual representation of the physical body, comment out to show character hitbox
+const hitboxGeo = new THREE.CylinderGeometry(0.5, 0.5, 1.8, 16);
+const hitboxMat = new THREE.MeshBasicMaterial({ color: 0xFFFF00, wireframe: true });
+const hitboxMesh = new THREE.Mesh(hitboxGeo, hitboxMat);
+scene.add(hitboxMesh);
+
+//Vec3 represents the dimensions of the body, and should be half of thre threejs dimensions
+const characterMat = new CANNON.Material();
+const characterBody = new CANNON.Body({
+  mass: 1000,
+  position: new CANNON.Vec3(0, 0.5, 0),
+  shape: new CANNON.Cylinder(0.5, 0.5, 1.8, 16),
+  material: characterMat
+});
+characterBody.linearDamping = 0.9;
+characterBody.allowSleep = true;
+world.addBody(characterBody);
+
+const characterGroundContact = new CANNON.ContactMaterial(
+  groundMat, characterMat,
+  {friction: 0}
+);
+world.addContactMaterial(characterGroundContact);
+
+
+function clampVelocity(body) {
+  if (Math.abs(body.velocity.x) < 0.005) body.velocity.x = 0;
+  if (Math.abs(body.velocity.z) < 0.005) body.velocity.z = 0;
+  if (Math.abs(body.velocity.y) < 0.005) body.velocity.y = 0;
+}
+
+
+//test ball
+// const sphereGeo = new THREE.SphereGeometry(2);
+// const sphereMat = new THREE.MeshBasicMaterial({ color: 0xFF0000, wireframe: true });
+// const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+// scene.add(sphereMesh);
+// const sphereBody = new CANNON.Body({
+//   mass: 1,
+//   shape: new CANNON.Sphere(2),
+//   position: new CANNON.Vec3(10, 10, 0),
+// });
+// world.addBody(sphereBody);
+
+
+function updatePhysics(deltaTime) {
+  ground.position.copy(groundBody.position);
+  ground.quaternion.copy(groundBody.quaternion);
+
+  hitboxMesh.position.copy(characterBody.position);
+  hitboxMesh.quaternion.copy(characterBody.quaternion);
+  
+  character.position.copy(characterBody.position);
+  character.position.y -= 0.9;
+  // character.quaternion.copy(characterBody.quaternion);
+
+  // sphereMesh.position.copy(sphereBody.position);
+  // sphereMesh.quaternion.copy(sphereBody.quaternion);
+  
+  
+  //reset angular velocity and quaternion to prevent rotation, clamp velocity to prevent sliding
+  characterBody.quaternion.setFromEuler(0, 0, 0);
+  characterBody.angularVelocity.set(0, 0, 0);
+  clampVelocity(characterBody);
+  world.step(1 / 60);
+}
 
 
 
@@ -416,17 +520,16 @@ function animate() {
     lastTime = time;
     renderer.render(scene, camera);
   }
-
   const deltaTime = clock.getDelta();
-
   if (mixer) {
     //takes data from clock to display the correct animation frame
     mixer.update(deltaTime);
   }
-
   if (character) {
-    character_movement(deltaTime);
+    characterMovement(deltaTime);
+    updatePhysics(deltaTime);
   }
+
 }
 
 renderer.setAnimationLoop(animate)
