@@ -5,13 +5,9 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-<<<<<<< Updated upstream
-    "dev": "vite"
-=======
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
->>>>>>> Stashed changes
   },
   "keywords": [],
   "author": "",
@@ -20,14 +16,10 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "cannon-es": "^0.20.0",
     "three": "^0.171.0",
-<<<<<<< Updated upstream
-    "vite": "^6.0.3"
-=======
     "vite": "^6.0.3",
     "vue": "^3.5.13"
   },
   "devDependencies": {
     "vite-plugin-static-copy": "^2.2.0"
->>>>>>> Stashed changes
   }
 }
