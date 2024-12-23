@@ -1,1 +1,0 @@
-{"mappings":"AAAA;;;;;;AAKA","sources":["style.css"],"sourcesContent":["* {\r\n    margin: 0;\r\n    padding: 0;\r\n    overflow: hidden;\r\n}\r\n#ground {\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n}"],"names":[],"version":3,"file":"index.3a01df49.css.map","sourceRoot":"/__parcel_source_root/"}
