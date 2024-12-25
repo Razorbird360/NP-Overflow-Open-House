@@ -21,3 +21,10 @@ Alternatively, "npx vite" to run project, but it does not guarantee consistency 
 ### Update project development pages
 ![update development subfolder](resources/Images/Readme_updateDev.jpg)  
 To update github pages
+
+---
+
+### GLB/FBX Model sources
+[Character model](https://www.mixamo.com/#/?page=1&query=leonard&type=Character)
+[Low poly pack](https://www.cgtrader.com/free-3d-models/plant/leaf/free-low-poly-pack)
+[Cottage house](https://www.cgtrader.com/free-3d-models/exterior/house/low-poly-cottage-05bac603-149c-4df1-b489-931147c87bf3)

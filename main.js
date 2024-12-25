@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x808080);
@@ -67,8 +68,8 @@ let leonard, character;
 let animations = {};
 const initModel = async () => {
   //leonard GLTF model contains scene and animations
-  const loader = new GLTFLoader();
-  leonard = await loader.loadAsync(
+  const gltfloader = new GLTFLoader();
+  leonard = await gltfloader.loadAsync(
     '/resources/leonard/leonard_animated.glb',
   );
 
@@ -92,6 +93,8 @@ const initModel = async () => {
   animations['turnright'] = turnright;
   animations['walk'] = walk;
   animations.idle.play();
+
+
 }
 
 initModel().then(() => {}); 
@@ -195,7 +198,7 @@ function face(direction) {
     }
   }
   
-  console.log(characterBody.position);
+  // console.log(characterBody.position);
 }
 
 
@@ -502,6 +505,63 @@ function updatePhysics(deltaTime) {
   clampVelocity(characterBody);
   world.step(1 / 60);
 }
+
+
+//iterate through children of the model to modify material, as materials are applied to child meshes not the parent object. If there are no children update model color itself
+function changeModelColor(model, color) {
+  let hasChildren = false;
+  model.traverse(function (child) {
+    if (child.isMesh) {
+      hasChildren = true;
+      if (child.material) {
+        child.material.color.set(color);
+        child.material.needsUpdate = true;
+      }
+    }
+  });
+
+  if (!hasChildren && model.material) {
+    model.material.color.set(color);
+    model.material.needsUpdate = true;
+  }
+}
+
+
+//load object models
+let loadedObjects = false;
+let fence, house;
+const objectLoader = async () => {
+  const fbxloader = new FBXLoader();
+  const gltfloader = new GLTFLoader();
+
+  const fenceModel = await fbxloader.loadAsync(
+    'resources/world_objects/fence.fbx'
+  );
+  fence = fenceModel.scene ? fenceModel.scene : fenceModel;
+  scene.add(fence);
+  
+  const houseModel = await gltfloader.loadAsync(
+    'resources/world_objects/cottage.glb'
+  );
+  house = houseModel.scene ? houseModel.scene : houseModel;
+  scene.add(house);
+  
+  
+};
+
+objectLoader().then(() => {
+  loadedObjects = true;
+  changeModelColor(fence, 0x7D5B4E);
+  fence.position.set(10, 0, 0);
+  fence.scale.set(0.01, 0.01, 0.01);
+
+  house.position.set(-0.3, 0, -5);
+  house.rotation.y = -Math.PI / 2;
+  house.scale.set(2, 2, 2);
+});
+
+
+
 
 
 
