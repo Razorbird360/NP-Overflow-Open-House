@@ -2,7 +2,7 @@
   "name": "np-overflow-open-house",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "src/main.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
