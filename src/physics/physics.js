@@ -1,6 +1,6 @@
 import * as CANNON from 'cannon-es';
 import * as THREE from 'three';
-import { gameState } from '../state/state.js';
+import { gameState } from '@/state/state.js';
 
 export function setupPhysicsWorld() {
   const world = new CANNON.World({

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { gameState } from '../state/state.js';
+import { gameState } from '@/state/state.js';
 
 export function face(direction) {
   if (gameState.facing === direction) {
@@ -152,7 +152,7 @@ export function characterMovement(deltaTime) {
 
 export async function initCharacter(scene) {
   const gltfloader = new GLTFLoader();
-  const leonard = await gltfloader.loadAsync('/resources/leonard/leonard_animated.glb');
+  const leonard = await gltfloader.loadAsync('/leonard/leonard_animated.glb');
 
   gameState.character = leonard.scene;
   scene.add(gameState.character);

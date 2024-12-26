@@ -1,17 +1,19 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { resolve } from 'node:path';
+
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/gh-pages/' : '/',  
+  base: process.env.NODE_ENV === 'production' ? '/NP-Overflow-Open-House/' : '/',
+  root: 'src',
   plugins: [
-    vue(),
-    viteStaticCopy({
-      targets: [
-        {
-          src: 'resources/*',
-          dest: 'resources'
-        }
-      ]
-    })
-  ]
+  ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src')
+    }
+  },
+
+  build: {
+    outDir: '../dist',
+    emptyOutDir: true,
+  }
 });

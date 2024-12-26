@@ -1,11 +1,11 @@
 // main.js
-import { gameState } from './state/state.js';
-import { createScene, createGround } from './scene/scene.js';
-import { setupPhysicsWorld, setupCharacterPhysics, updatePhysics } from './physics/physics.js';
-import { initCharacter, characterMovement } from './scene/character.js';
-import { initAudio } from './audio/audio.js';
-import { loadWorldObjects } from './scene/objects.js';
-import { setupInputHandlers } from './input.js';
+import { gameState } from '/state/state.js';
+import { createScene, createGround } from '/scene/scene.js';
+import { setupPhysicsWorld, setupCharacterPhysics, updatePhysics } from '/physics/physics.js';
+import { initCharacter, characterMovement } from '/scene/character.js';
+import { initAudio } from '/audio/audio.js';
+import { loadWorldObjects } from '/scene/objects.js';
+import { setupInputHandlers } from '/input.js';
 import * as THREE from 'three';
 
 async function init() {
