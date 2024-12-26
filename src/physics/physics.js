@@ -27,7 +27,8 @@ export function setupCharacterPhysics(world, groundMat) {
     shape: new CANNON.Cylinder(0.5, 0.5, 1.8, 16),
     material: characterMat
   });
-  characterBody.linearDamping = 0.9;
+
+  characterBody.linearDamping = 0.3;
   characterBody.allowSleep = true;
   world.addBody(characterBody);
 
@@ -64,5 +65,5 @@ export function updatePhysics(deltaTime, ground, groundBody, hitboxMesh) {
   gameState.characterBody.quaternion.setFromEuler(0, 0, 0);
   gameState.characterBody.angularVelocity.set(0, 0, 0);
   clampVelocity(gameState.characterBody);
-  gameState.world.step(1 / 60);
+  gameState.world.step(1 / 60, deltaTime, 10);
 }

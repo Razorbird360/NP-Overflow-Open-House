@@ -48,6 +48,7 @@ async function init() {
     const time = Date.now();
     if (time - lastTime >= interval) {
       lastTime = time;
+      controls.update();
       renderer.render(scene, camera);
     }
 

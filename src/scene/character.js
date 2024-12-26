@@ -117,8 +117,8 @@ export function move(speed, deltaTime) {
 }
 
 export function characterMovement(deltaTime) {
-  const walkingSpeed = 150;
-  const runningSpeed = 300;
+  const walkingSpeed = 600;
+  const runningSpeed = 1200;
 
   if (gameState.keys.shift) {
     move(runningSpeed, deltaTime);
