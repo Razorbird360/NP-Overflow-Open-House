@@ -1,6 +1,7 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { gameState } from '@/state/state.js';
+import {BASE_PATH} from "@/utils/utils.js";
 
 export function changeModelColor(model, color) {
   let hasChildren = false;
@@ -25,12 +26,12 @@ export async function loadWorldObjects(scene) {
   const gltfloader = new GLTFLoader();
 
   // Load fence
-  const fenceModel = await fbxloader.loadAsync('/world_objects/fence.fbx');
+  const fenceModel = await fbxloader.loadAsync(`${BASE_PATH}world_objects/fence.fbx`);
   gameState.objects.fence = fenceModel.scene ? fenceModel.scene : fenceModel;
   scene.add(gameState.objects.fence);
 
   // Load house
-  const houseModel = await gltfloader.loadAsync('/world_objects/cottage.glb');
+  const houseModel = await gltfloader.loadAsync(`${BASE_PATH}world_objects/cottage.glb`);
   gameState.objects.house = houseModel.scene ? houseModel.scene : houseModel;
   scene.add(gameState.objects.house);
 
