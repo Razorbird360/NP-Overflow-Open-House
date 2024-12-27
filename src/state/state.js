@@ -16,6 +16,7 @@ export class GameState {
     this.objects = {
       fence: null,
       house: null,
+      workshops: null
     };
     this.world = null;
     this.characterBody = null;
