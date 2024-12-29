@@ -64,7 +64,7 @@ async function init() {
     }
   }
 
-  renderer.setAnimationLoop(animate);
+  await renderer.setAnimationLoop(animate);
 }
 
 // Start the application

@@ -22,8 +22,8 @@ export function setupPhysicsWorld() {
 export function setupCharacterPhysics(world, groundMat) {
   const characterMat = new CANNON.Material();
   const characterBody = new CANNON.Body({
-    mass: 1000,
-    position: new CANNON.Vec3(0, 1, 0),
+    mass: 100,
+    position: new CANNON.Vec3(0, 0.9, 0),
     shape: new CANNON.Cylinder(0.5, 0.5, 1.8, 16),
     material: characterMat
   });
