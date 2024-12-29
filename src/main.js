@@ -1,7 +1,7 @@
 // main.js
 import { gameState } from '/state/state.js';
 import { createScene, createGround } from '/scene/scene.js';
-import { setupPhysicsWorld, setupCharacterPhysics, updatePhysics } from '/physics/physics.js';
+import { setupPhysicsWorld, setupCharacterPhysics, updatePhysics, initPhysicalBodies } from '/physics/physics.js';
 import { initCharacter, characterMovement } from '/scene/character.js';
 import { initAudio } from '/audio/audio.js';
 import { loadWorldObjects } from '/scene/objects.js';
@@ -30,7 +30,8 @@ async function init() {
   await Promise.all([
     initCharacter(scene),
     initAudio(listener),
-    loadWorldObjects(scene)
+    loadWorldObjects(scene),
+    initPhysicalBodies(scene, world)
   ]);
 
   // Setup input handlers
