@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import {WebGPURenderer} from "three/webgpu";
 
 export function createScene() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x808080);
 
-  const renderer = new THREE.WebGLRenderer({
+  const renderer = new WebGPURenderer({
     canvas: document.querySelector('#canvas'),
+    antialias: true
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
