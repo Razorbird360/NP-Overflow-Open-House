@@ -23,7 +23,7 @@ export function setupCharacterPhysics(world, groundMat) {
   const characterMat = new CANNON.Material();
   const characterBody = new CANNON.Body({
     mass: 100,
-    position: new CANNON.Vec3(0, 0.9, 0),
+    position: new CANNON.Vec3(0, 3, 0),
     shape: new CANNON.Cylinder(0.5, 0.5, 1.8, 16),
     material: characterMat
   });
@@ -34,7 +34,10 @@ export function setupCharacterPhysics(world, groundMat) {
 
   const characterGroundContact = new CANNON.ContactMaterial(
     groundMat, characterMat,
-    { friction: 10 }
+    { 
+      friction: 10, 
+      restitution: 0
+    }
   );
   world.addContactMaterial(characterGroundContact);
 
@@ -66,4 +69,21 @@ export function updatePhysics(deltaTime, ground, groundBody, hitboxMesh) {
   gameState.characterBody.angularVelocity.set(0, 0, 0);
   clampVelocity(gameState.characterBody);
   gameState.world.step(1 / 60, deltaTime);
+}
+
+export function initPhysicalBodies(scene, world) {
+  //Object bodies and visual representation
+  const houseBoxGeo = new THREE.BoxGeometry(5.5, 10, 8.5, 16);
+  const houseBoxMat = new THREE.MeshBasicMaterial({ color: 0xFFFF00, wireframe: true });
+  const houseBoxMesh = new THREE.Mesh(houseBoxGeo, houseBoxMat);
+  houseBoxMesh.position.set(0, 5, -9);
+  scene.add(houseBoxMesh);
+
+  const houseBoxBody = new CANNON.Body({
+    shape: new CANNON.Box(new CANNON.Vec3(2.75, 5, 4.25)),
+    type: CANNON.Body.STATIC,
+    position: new CANNON.Vec3(0, 5, -9),
+  });
+  world.addBody(houseBoxBody);
+
 }
