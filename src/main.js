@@ -50,17 +50,17 @@ async function init() {
       lastTime = time;
       controls.update();
       renderer.render(scene, camera);
-    }
 
-    const deltaTime = clock.getDelta();
+      const deltaTime = clock.getDelta();
 
-    if (gameState.mixer) {
-      gameState.mixer.update(deltaTime);
-    }
+      if (gameState.mixer) {
+        gameState.mixer.update(deltaTime);
+      }
 
-    if (gameState.character) {
-      characterMovement(deltaTime);
-      updatePhysics(deltaTime, ground, groundBody, hitboxMesh);
+      if (gameState.character) {
+        characterMovement(deltaTime);
+        updatePhysics(deltaTime, ground, groundBody, hitboxMesh);
+      }
     }
   }
 
