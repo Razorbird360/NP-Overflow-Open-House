@@ -22,18 +22,19 @@ export function setupPhysicsWorld() {
 export function setupCharacterPhysics(world, groundMat) {
   const characterMat = new CANNON.Material();
   const characterBody = new CANNON.Body({
-    mass: 1000,
-    position: new CANNON.Vec3(0, 0.5, 0),
+    mass: 100,
+    position: new CANNON.Vec3(0, 0.9, 0),
     shape: new CANNON.Cylinder(0.5, 0.5, 1.8, 16),
     material: characterMat
   });
-  characterBody.linearDamping = 0.9;
+
+  characterBody.linearDamping = 0.3;
   characterBody.allowSleep = true;
   world.addBody(characterBody);
 
   const characterGroundContact = new CANNON.ContactMaterial(
     groundMat, characterMat,
-    { friction: 0 }
+    { friction: 10 }
   );
   world.addContactMaterial(characterGroundContact);
 
@@ -64,5 +65,5 @@ export function updatePhysics(deltaTime, ground, groundBody, hitboxMesh) {
   gameState.characterBody.quaternion.setFromEuler(0, 0, 0);
   gameState.characterBody.angularVelocity.set(0, 0, 0);
   clampVelocity(gameState.characterBody);
-  gameState.world.step(1 / 60);
+  gameState.world.step(1 / 60, deltaTime);
 }
