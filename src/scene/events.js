@@ -21,12 +21,12 @@ export const loadEvents = async (scene) => {
     font.load(`${BASE_PATH}Roboto_Regular.json`, function (font) {
       const geometry = new TextGeometry(event.title, {
         font: font,
-        size: 0.1,
-        height: 0.01,
+        size: 0.25,
+        depth: 0.01,
       });
       const textMaterial = new MeshBasicMaterial({color: 0xFFFFFF});
       const text = new Mesh(geometry, textMaterial);
-      text.position.set(initalPosition.x, initalPosition.y + 2, initalPosition.z+(-5*i));
+      text.position.set(initalPosition.x -1, initalPosition.y + 2, initalPosition.z+(-5*i));
       scene.add(text)
     });
 
