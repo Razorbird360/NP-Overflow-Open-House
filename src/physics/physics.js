@@ -22,20 +22,20 @@ export function setupPhysicsWorld() {
 export function setupCharacterPhysics(world, groundMat) {
   const characterMat = new CANNON.Material();
   const characterBody = new CANNON.Body({
-    mass: 100,
+    mass: 1000,
     position: new CANNON.Vec3(0, 3, 0),
     shape: new CANNON.Cylinder(0.5, 0.5, 1.8, 16),
     material: characterMat
   });
 
-  characterBody.linearDamping = 0.3;
+  characterBody.linearDamping = 0.99;
   characterBody.allowSleep = true;
   world.addBody(characterBody);
 
   const characterGroundContact = new CANNON.ContactMaterial(
     groundMat, characterMat,
     { 
-      friction: 10, 
+      friction: 0, 
       restitution: 0
     }
   );
