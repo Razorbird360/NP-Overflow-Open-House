@@ -30,6 +30,17 @@ export const loadEvents = async (scene) => {
       scene.add(text)
     });
 
+      const descriptionGeometry = new TextGeometry(event.description, {
+        font: font,
+        size: 0.15,
+        depth: 0.01,
+      });
+      const descriptionMaterial = new MeshBasicMaterial({ color: 0xAAAAAA });
+      const descriptionText = new Mesh(descriptionGeometry, descriptionMaterial);
+      descriptionText.position.set(initalPosition.x - 1, initalPosition.y - 1, initalPosition.z + (-5 * i));
+      scene.add(descriptionText);
+    });
+    
     const texture = await new TextureLoader().loadAsync(`${BASE_PATH}images/${event.image}`);
     texture.colorSpace = SRGBColorSpace;
     texture.generateMipmaps = true;
