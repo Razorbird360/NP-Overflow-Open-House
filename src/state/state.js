@@ -4,7 +4,7 @@ export class GameState {
     this.mixer = null;
     this.animations = {};
     this.currentAction = null;
-    this.facing = 'back';
+    this.facing = "back";
     this.keys = {
       w: false,
       a: false,
@@ -16,7 +16,8 @@ export class GameState {
     this.objects = {
       fence: null,
       house: null,
-      workshops: null
+      workshops: null,
+      golfball: null,
     };
     this.world = null;
     this.characterBody = null;

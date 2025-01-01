@@ -28,14 +28,14 @@ export function setupCharacterPhysics(world, groundMat) {
     material: characterMat
   });
 
-  characterBody.linearDamping = 0.9;
+  characterBody.linearDamping = 0.999;
   characterBody.allowSleep = true;
   world.addBody(characterBody);
 
   const characterGroundContact = new CANNON.ContactMaterial(
     groundMat, characterMat,
     { 
-      friction: 10, 
+      friction: 0, 
       restitution: 0
     }
   );

@@ -7,6 +7,7 @@ import { initAudio } from '/audio/audio.js';
 import { loadWorldObjects } from '/scene/objects.js';
 import { setupInputHandlers } from '/input.js';
 import * as THREE from 'three';
+import { updateCamera } from './camera/camera';
 
 async function init() {
   // Setup scene and core components
@@ -53,6 +54,13 @@ async function init() {
       renderer.render(scene, camera);
 
       const deltaTime = clock.getDelta();
+
+      if (gameState.currentAction === gameState.animations.idle) {
+        controls.enabled = true;
+      } 
+      else {
+        updateCamera(camera, controls, gameState.characterBody);
+      }
 
       if (gameState.mixer) {
         gameState.mixer.update(deltaTime);
