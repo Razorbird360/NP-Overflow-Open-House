@@ -28,7 +28,7 @@ export function setupCharacterPhysics(world, groundMat) {
     material: characterMat
   });
 
-  characterBody.linearDamping = 0.99;
+  characterBody.linearDamping = 0.999;
   characterBody.allowSleep = true;
   world.addBody(characterBody);
 
