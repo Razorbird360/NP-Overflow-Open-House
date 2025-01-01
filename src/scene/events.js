@@ -30,37 +30,6 @@ export const loadEvents = async (scene) => {
       scene.add(text)
     });
 
-    const maxLineLength = 30;
-      const words = event.description.split(' ');
-      const lines = words.reduce((acc, word) => {
-        if (acc[acc.length - 1].length + word.length + 1 <= maxLineLength) {
-          acc[acc.length - 1] += ' ' + word;
-        } else {
-          acc.push(word);
-        }
-        return acc;
-      }, ['']);
-
-      lines.forEach((line, index) => {
-        const lineGeometry = new TextGeometry(line, {
-          font: font,
-          size: 0.15,
-          depth: 0.01,
-        });
-        const lineMaterial = new MeshBasicMaterial({ color: 0xAAAAAA });
-        const lineText = new Mesh(lineGeometry, lineMaterial);
-
-        // Position each line below the previous one
-        lineText.position.set(
-          initalPosition.x - 1,
-          initalPosition.y - 1 - index * 0.2,
-          initalPosition.z + (-5 * i)
-        );
-
-        scene.add(lineText);
-      });
-    });
-
     const texture = await new TextureLoader().loadAsync(`${BASE_PATH}images/${event.image}`);
     texture.colorSpace = SRGBColorSpace;
     texture.generateMipmaps = true;
