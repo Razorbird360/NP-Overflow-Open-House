@@ -1,11 +1,5 @@
 [
   {
-   "id": "about",
-    "date": "2024-12-26",
-    "title": "Overflow",
-    "image": "overflow.png"
-  },
-  {
     "id": "threejs",
     "date": "2024-11-22",
     "title": "Three.js workshop",

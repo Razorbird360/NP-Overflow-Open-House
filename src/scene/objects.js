@@ -3,6 +3,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { gameState } from '@/state/state.js';
 import {BASE_PATH} from "@/utils/utils.js";
 import {loadEvents} from "@/scene/events.js";
+import {loadNotice} from "@/scene/notice.js";
 
 export function changeModelColor(model, color) {
   let hasChildren = false;
@@ -37,6 +38,7 @@ export async function loadWorldObjects(scene) {
   scene.add(gameState.objects.house);
 
   const workshopsModel = await loadEvents(scene);
+  const bulletin = await loadNotice(scene)
 
   // Configure loaded objects
   changeModelColor(gameState.objects.fence, 0x7D5B4E);
