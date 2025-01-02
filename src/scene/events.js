@@ -13,7 +13,7 @@ import events from "@/public/posts.json"
 import {FontLoader} from "three/addons";
 
 export const loadEvents = async (scene) => {
-  const initalPosition = {x: 15, y: 2, z: -1}
+  const initialPosition = {x: 15, y: 2, z: -1}
   const sortedEvents = events.sort((a, b) => new Date(b.date) - new Date(a.date))
   for (const i in sortedEvents) {
     const event = sortedEvents[i]
