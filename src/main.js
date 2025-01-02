@@ -2,7 +2,7 @@
 import { gameState } from '/state/state.js';
 import { createScene, createGround } from '/scene/scene.js';
 import { setupPhysicsWorld, setupCharacterPhysics, updatePhysics, initPhysicalBodies } from '/physics/physics.js';
-import { initCharacter, characterMovement } from '/scene/character.js';
+import { initCharacter, characterMovement, isMoving } from '/scene/character.js';
 import { initAudio } from '/audio/audio.js';
 import { loadWorldObjects } from '/scene/objects.js';
 import { setupInputHandlers } from '/input.js';
@@ -55,7 +55,7 @@ async function init() {
 
       const deltaTime = clock.getDelta();
 
-      if (gameState.currentAction === gameState.animations.idle) {
+      if (!isMoving()) {
         controls.enabled = true;
       } 
       else {

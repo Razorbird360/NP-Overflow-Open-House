@@ -173,3 +173,12 @@ export async function initCharacter(scene) {
   gameState.currentAction = gameState.animations.idle;
   gameState.animations.idle.play();
 }
+
+export function isMoving() {
+  const velocity = gameState.characterBody.velocity;
+  const moving = 
+    Math.abs(velocity.x) > 0.02 ||
+    Math.abs(velocity.y) > 0.02 ||
+    Math.abs(velocity.z) > 0.02;
+  return moving;
+}
