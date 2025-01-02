@@ -3,24 +3,28 @@
     "id": "threejs",
     "date": "2024-11-22",
     "title": "Three.js workshop",
-    "image": "threejs.jpg"
+    "image": "threejs.jpg",
+    "description": "On 22 November, we conducted an exciting workshop where Overflowers brought our solar system to life on their laptops by creating 3D objects of solar bodies such as planets, moon and stars using a JavaScript library called Three.JS."
   },
   {
     "id": "bytehackz",
     "date": "2024-11-12",
     "title": "Bytehackz 2024",
-    "image": "bytehackz.jpg"
+    "image": "bytehackz.jpg",
+    "description": "Overflow facilitated a hackathon called Bytehackz for Year 2 students of Diploma in Information Technology on 12 and 13 November. During this hackathon, there were fun booths for nerf gun, board games, nintendo console games, as well as a variety of snacks!" 
   },
   {
     "id": "unityii",
     "date": "2024-11-8",
     "title": "Unity Part II",
-    "image": "unityII.jpg"
+    "image": "unityII.jpg",
+    "description": "On 8 November, Overflowers learned how to recreate some of the features essential in making the gaming experience fun and enjoyable using Unity."
   },
   {
     "id": "unityi",
     "date": "2024-11-1",
     "title": "Unity Part I",
-    "image": "unityI.jpg"
+    "image": "unityI.jpg",
+    "description": "On 1 November, Overflowers learned the fundamentals of game development and brought game characters and worlds to life using the game engine called Unity."
   }
 ]
