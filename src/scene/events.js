@@ -15,10 +15,14 @@ import {FontLoader} from "three/addons";
 export const loadEvents = async (scene) => {
   const initialPosition = {x: 15, y: 2, z: -1}
   const sortedEvents = events.sort((a, b) => new Date(b.date) - new Date(a.date))
+
   for (const i in sortedEvents) {
     const event = sortedEvents[i]
     const font = new FontLoader();
+    
     font.load(`${BASE_PATH}Roboto_Regular.json`, function (font) {
+      // console.log(font);
+
       const geometry = new TextGeometry(event.title, {
         font: font,
         size: 0.25,
@@ -26,11 +30,10 @@ export const loadEvents = async (scene) => {
       });
       const textMaterial = new MeshBasicMaterial({color: 0xFFFFFF});
       const text = new Mesh(geometry, textMaterial);
-      text.position.set(initialPosition.x -1, initialPosition.y + 2, initialPosition.z+(-5*i));
-      scene.add(text)
-    });
+      text.position.set(initialPosition.x - 1, initialPosition.y + 2, initialPosition.z + (-5 * i));
+      scene.add(text);
 
-    const maxLineLength = 30;
+      const maxLineLength = 30;
       const words = event.description.split(' ');
       const lines = words.reduce((acc, word) => {
         if (acc[acc.length - 1].length + word.length + 1 <= maxLineLength) {
@@ -52,7 +55,7 @@ export const loadEvents = async (scene) => {
         lineText.position.set(initialPosition.x - 1, initialPosition.y - 1 - index * 0.2, initialPosition.z + (-5 * i));
         scene.add(lineText);
       });
-    };
+    });
 
     const texture = await new TextureLoader().loadAsync(`${BASE_PATH}images/${event.image}`);
     texture.colorSpace = SRGBColorSpace;
@@ -61,9 +64,9 @@ export const loadEvents = async (scene) => {
     texture.magFilter = LinearFilter;
 
     const geometry = new BoxGeometry(4, 3, 0.01);
-
     const material = new MeshStandardMaterial({ map: texture });
     const image = new Mesh(geometry, material);
-    image.position.set(initialPosition.x, initialPosition.y, initialPosition.z+(-5*i));
-    scene.add(image)
-}
+    image.position.set(initialPosition.x, initialPosition.y, initialPosition.z + (-5 * i));
+    scene.add(image);
+  }
+};
