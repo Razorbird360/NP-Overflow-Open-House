@@ -12,10 +12,10 @@ function onKeyDown(event) {
   if (!gameState.character || !gameState.mixer) return;
 
   const keyActions = {
-    w: () => { gameState.keys.w = true; face('front'); },
-    a: () => { gameState.keys.a = true; face('left'); },
-    s: () => { gameState.keys.s = true; face('back'); },
-    d: () => { gameState.keys.d = true; face('right'); },
+    w: () => { gameState.keys.w = true; },
+    a: () => { gameState.keys.a = true; },
+    s: () => { gameState.keys.s = true; },
+    d: () => { gameState.keys.d = true; },
     shift: () => { gameState.keys.shift = true; }
   };
 

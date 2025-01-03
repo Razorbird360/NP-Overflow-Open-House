@@ -114,9 +114,25 @@ export function move(speed, deltaTime) {
     gameState.characterBody.velocity.y,
     direction.z * speed * deltaTime
   );
+  console.log("Rotation Y:", gameState.character.rotation.y);
+  console.log("Direction:", direction);
 }
 
 export function characterMovement(deltaTime) {
+
+  if (gameState.keys.w) {
+    face('front');
+  }
+  else if (gameState.keys.a) {
+    face('left');
+  }
+  else if (gameState.keys.s) {
+    face('back');
+  }
+  else if (gameState.keys.d) {
+    face('right');
+  }
+
   const walkingSpeed = 150;
   const runningSpeed = 300;
 
