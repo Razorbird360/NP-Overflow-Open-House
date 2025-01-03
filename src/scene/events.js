@@ -32,6 +32,7 @@ export const loadEvents = async (scene) => {
       const text = new Mesh(geometry, textMaterial);
       text.position.set(initialPosition.x - 1, initialPosition.y + 2, initialPosition.z + (-5 * i));
       scene.add(text);
+    });
 
     const texture = await new TextureLoader().loadAsync(`${BASE_PATH}images/${event.image}`);
     texture.colorSpace = SRGBColorSpace;
