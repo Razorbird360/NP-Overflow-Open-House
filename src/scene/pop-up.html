@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Styled Popup Example</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #008b8b;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    #popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 450px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      padding: 30px;
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+
+    #popup img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    #popup h1 {
+      margin: 10px 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    #popup p {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    #popup button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: teal;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #popup button:hover {
+      background: darkcyan;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="popup">
+    <img id="popupImage" src="" alt="Event Image">
+    <h1 id="popupTitle"></h1>
+    <p id="popupDescription"></p>
+    <button id="closePopup"></button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.154.0/three.min.js"></script>
+  <script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    camera.position.z = 5;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    fetch('@/public/posts.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(event => {
+        // Populate the popup with JSON data
+        document.getElementById('popupImage').src = event.image;
+        document.getElementById('popupTitle').textContent = event.title;
+        document.getElementById('popupDescription').innerHTML = event.description;
+        document.getElementById('closePopup').textContent = "Close";
+      })
+      .catch(error => {
+        console.error('Error loading JSON:', error);
+      });
+
+    window.addEventListener("click", () => {
+      document.getElementById("popup").style.display = "block";
+    });
+
+    document.getElementById("closePopup").addEventListener("click", () => {
+      document.getElementById("popup").style.display = "none";
+    });
+  </script>
+</body>
+</html>
