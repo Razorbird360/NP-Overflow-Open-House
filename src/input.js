@@ -1,6 +1,5 @@
 // input.js
 import { gameState } from './state/state.js';
-import { face } from './scene/character.js';
 
 export function setupInputHandlers() {
   window.addEventListener('keydown', onKeyDown);

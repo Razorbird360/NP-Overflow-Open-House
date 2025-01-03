@@ -114,8 +114,6 @@ export function move(speed, deltaTime) {
     gameState.characterBody.velocity.y,
     direction.z * speed * deltaTime
   );
-  console.log("Rotation Y:", gameState.character.rotation.y);
-  console.log("Direction:", direction);
 }
 
 export function characterMovement(deltaTime) {
