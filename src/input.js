@@ -15,7 +15,10 @@ function onKeyDown(event) {
     a: () => { gameState.keys.a = true; },
     s: () => { gameState.keys.s = true; },
     d: () => { gameState.keys.d = true; },
-    shift: () => { gameState.keys.shift = true; }
+    shift: () => { gameState.keys.shift = true; },
+    t: () => {
+      gameState.keys.t = gameState.keys.t === 3 ? 1 : (gameState.keys.t || 1) + 1;
+    }
   };
 
   const action = keyActions[event.key.toLowerCase()];

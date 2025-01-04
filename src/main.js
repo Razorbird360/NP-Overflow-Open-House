@@ -9,6 +9,7 @@ import { setupInputHandlers } from '/input.js';
 import * as THREE from 'three';
 import { updateCamera } from './camera/camera';
 
+gameState.keys.t = 1;
 async function init() {
   // Setup scene and core components
   const { scene, renderer, camera, listener, controls } = createScene();
@@ -55,12 +56,9 @@ async function init() {
 
       const deltaTime = clock.getDelta();
 
-      if (!isMoving()) {
-        controls.enabled = true;
-      } 
-      else {
-        updateCamera(camera, controls, gameState.characterBody);
-      }
+      
+      updateCamera(camera, controls, gameState.characterBody, isMoving());
+      
 
       if (gameState.mixer) {
         gameState.mixer.update(deltaTime);
