@@ -32,7 +32,12 @@ function dupFence(scene) {
 
     for (let i = 0; i < fenceCount; i++) {
         const fenceClone = gameState.objects.fence.clone();
-        fenceClone.position.set(-i * spacing -10, 0, 0);
+        fenceClone.position.set(-i * spacing -10, 0, -3);
+        scene.add(fenceClone);
+    }
+    for (let i = 0; i < fenceCount; i++) {
+        const fenceClone = gameState.objects.fence.clone();
+        fenceClone.position.set(-i * spacing -10, 0, 3);
         scene.add(fenceClone);
     }
 }
