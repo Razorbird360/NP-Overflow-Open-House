@@ -4,6 +4,7 @@ import { gameState } from '@/state/state.js';
 import {BASE_PATH} from "@/utils/utils.js";
 import {loadEvents} from "@/scene/events.js";
 import {loadNotice} from "@/scene/notice.js";
+import { loadGolf } from "@/scene/golf.js";
 
 export function changeModelColor(model, color) {
   let hasChildren = false;
@@ -27,12 +28,6 @@ export async function loadWorldObjects(scene) {
   const fbxloader = new FBXLoader();
   const gltfloader = new GLTFLoader();
 
-  // Load fence
-  const fenceModel = await fbxloader.loadAsync(
-    `${BASE_PATH}world_objects/fence.fbx`
-  );
-  gameState.objects.fence = fenceModel.scene ? fenceModel.scene : fenceModel;
-  scene.add(gameState.objects.fence);
 
   // Load house
   const houseModel = await gltfloader.loadAsync(
@@ -50,12 +45,11 @@ export async function loadWorldObjects(scene) {
   scene.add(gameState.objects.golfball);
 
   const workshopsModel = await loadEvents(scene);
-  const bulletin = await loadNotice(scene)
+  const bulletin = await loadNotice(scene);
+  const golf = await loadGolf(scene);
 
   // Configure loaded objects
   changeModelColor(gameState.objects.fence, 0x7d5b4e);
-  gameState.objects.fence.position.set(10, 0, 0);
-  gameState.objects.fence.scale.set(0.01, 0.01, 0.01);
 
   gameState.objects.house.position.set(-0.3, 0, -5);
   gameState.objects.house.rotation.y = -Math.PI / 2;

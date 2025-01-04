@@ -1,6 +1,3 @@
-// camera.js
-import * as THREE from 'three';
-
 export function updateCamera(camera, controls, characterBody) {
     controls.enabled = false;
     let { x, y, z } = characterBody.position;
