@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { WebGPURenderer } from "three/webgpu";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js"; 
 
 export function createScene() {
   const scene = new THREE.Scene();
@@ -31,6 +32,9 @@ export function createScene() {
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 3);
   scene.add(ambientLight);
+
+  // golf flag
+  loadGolfFlag(scene);
 
   return { scene, renderer, camera, listener, controls };
 }
@@ -65,4 +69,21 @@ export function createGround() {
   ground.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
 
   return ground;
+}
+
+// loadGolfFlag function to load into the scene
+async function loadGolfFlag(scene) {
+  const fbxloader = new FBXLoader();
+  try {
+    const flagModel = await fbxloader.loadAsync(
+      `${BASE_PATH}world_objects/golf_flag.fbx` 
+    );
+    flagModel.scale.set(0.02, 0.02, 0.02); 
+    flagModel.position.set(5, 0, -10); 
+    scene.add(flagModel);
+
+    console.log("Golf flag loaded successfully!");
+  } catch (error) {
+    console.error("Error loading golf flag:", error);
+  }
 }

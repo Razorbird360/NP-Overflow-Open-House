@@ -44,6 +44,9 @@ export async function loadWorldObjects(scene) {
     : golfballModel;
   scene.add(gameState.objects.golfball);
 
+  // Loading in golf_flag.fbx file
+  await loadFlag(scene);
+
   const workshopsModel = await loadEvents(scene);
   const bulletin = await loadNotice(scene);
   const golf = await loadGolf(scene);
@@ -59,4 +62,23 @@ export async function loadWorldObjects(scene) {
   gameState.objects.golfball.scale.set(0.001, 0.001, 0.001);
 
   gameState.loadedObjects = true;
+}
+
+// Configuring the function to the golf_flag_pit.fbx object
+export async function loadFlag(scene) {
+  const fbxloader = new FBXLoader();
+  try {
+    const flagModel = await fbxloader.loadAsync(
+      `${BASE_PATH}world_objects/golf_flag.fbx` // path to golf_flag.fbx file
+    );
+    gameState.objects.ukFlag = flagModel.scene || flagModel;
+    gameState.objects.ukFlag.scale.set(0.2, 0.2, 0.2);
+    gameState.objects.ukFlag.position.set(-10, 0, 0); // flag coords
+    gameState.objects.ukFlag.rotation.y = Math.PI / 2;  // the flag direction 
+
+    scene.add(gameState.objects.ukFlag);
+    console.log("golf Flag loaded successfully!");
+  } catch (error) {
+    console.error("Error loading golf Flag:", error);
+  }
 }
