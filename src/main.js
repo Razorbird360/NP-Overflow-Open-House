@@ -25,7 +25,7 @@ async function init() {
 
   const { characterBody, hitboxMesh } = setupCharacterPhysics(world, groundMat);
   gameState.characterBody = characterBody;
-  scene.add(hitboxMesh);
+  // scene.add(hitboxMesh);
 
   // Initialize character, audio, and world objects
   await Promise.all([

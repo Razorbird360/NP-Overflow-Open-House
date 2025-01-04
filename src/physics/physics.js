@@ -77,7 +77,7 @@ export function initPhysicalBodies(scene, world) {
   const houseBoxMat = new THREE.MeshBasicMaterial({ color: 0xFFFF00, wireframe: true });
   const houseBoxMesh = new THREE.Mesh(houseBoxGeo, houseBoxMat);
   houseBoxMesh.position.set(0, 5, -9);
-  scene.add(houseBoxMesh);
+  // scene.add(houseBoxMesh);
 
   const houseBoxBody = new CANNON.Body({
     shape: new CANNON.Box(new CANNON.Vec3(2.75, 5, 4.25)),
