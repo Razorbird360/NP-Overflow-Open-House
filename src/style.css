@@ -16,7 +16,58 @@
     transform: translate(-50%, -50%);
     border-radius: 8px;
     z-index: 1000;
+    width: 450px;
+    background: white;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    padding: 30px;
+    display: none;
+    animation: fadeIn 0.5s;
 }
+/* body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #008b8b;
+    }
+
+    canvas {
+      display: block;
+    }
+ */
+    #popup img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    #popup h1 {
+      margin: 10px 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    #popup p {
+      color: #666;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    #popup button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background: teal;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #popup button:hover {
+      background: darkcyan;
+    }
 
 .hidden {
     display: none;
