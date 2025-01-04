@@ -69,6 +69,15 @@
       background: darkcyan;
     }
 
+@keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
 .hidden {
     display: none;
     visibility: hidden;
