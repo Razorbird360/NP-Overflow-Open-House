@@ -60,7 +60,7 @@ async function init() {
   ]);
 
   // Fetch and handle JSON data
-  fetch('@/public/posts.json')
+  fetch('./public/posts.json')
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -77,15 +77,26 @@ async function init() {
       console.error('Error loading JSON:', error);
     });
 
-  window.addEventListener('click', () => {
-    document.getElementById('popup').style.display = 'block';
-  });
+  // window.addEventListener('click', () => {
+  //   document.getElementById('popup').style.display = 'block';
+  // });
+  window.addEventListener('click', (event) => {
+     const popup = document.getElementById('popup');
+     if (popup) {
+       popup.style.display = 'block';
+     }
+   });
 
+  // document.getElementById('closePopup').addEventListener('click', () => {
+  //   document.getElementById('popup').style.display = 'none';
+  // });
   document.getElementById('closePopup').addEventListener('click', () => {
-    document.getElementById('popup').style.display = 'none';
-  });
+     const popup = document.getElementById('popup');
+     if (popup) {
+       popup.style.display = 'none';
+     }
+   });
 
-  
   // Setup input handlers
   setupInputHandlers();
 
