@@ -1,7 +1,7 @@
 import { gameState } from '@/state/state.js';
 import * as THREE from 'three';
 export function updateCamera(camera, controls, characterBody, isMoving) {
-    console.log(gameState.keys.t);
+    // console.log(gameState.keys.t);
     switch (gameState.keys.t) {
         case 1:
             if (!isMoving) {
