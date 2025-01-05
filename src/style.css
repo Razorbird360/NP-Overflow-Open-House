@@ -39,7 +39,7 @@
     outline: inherit;
 }
 
-.popup\.title {
+#popup-title {
     font-weight: bold;
     font-size: 2rem;
 }

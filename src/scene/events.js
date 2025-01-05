@@ -54,7 +54,8 @@ export const loadEvents = async (scene) => {
             <p>${event.description}</p>
         </div>
       `
-      document.getElementById("popup-top").innerHTML = document.getElementById("popup-top").innerHTML.replace("%%EVENT_TITLE%%", event.title);
+
+      document.getElementById("popup-title").innerText = event.title;
       document.getElementById("popup-close").addEventListener("click", (e) => {
         document.getElementById("popup").classList.add("hidden")
       })
