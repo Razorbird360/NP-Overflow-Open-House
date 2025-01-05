@@ -11,6 +11,7 @@ import {BASE_PATH} from "@/utils/utils.js";
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import events from "@/public/posts.json"
 import {FontLoader} from "three/addons";
+import {gameState} from "@/state/state.js";
 
 export const loadEvents = async (scene) => {
   const initialPosition = {x: 15, y: 2, z: -1}
@@ -45,5 +46,19 @@ export const loadEvents = async (scene) => {
     const image = new Mesh(geometry, material);
     image.position.set(initialPosition.x, initialPosition.y, initialPosition.z + (-5 * i));
     scene.add(image);
+    gameState.interactive.add(image);
+    image.addEventListener("click", (e) => {
+      document.getElementById("popup-content").innerHTML = `
+        <div id="popup-info">
+            <img width="480px" src="${BASE_PATH}images/${event.image}" alt=${event.title} />
+            <p>${event.description}</p>
+        </div>
+      `
+      document.getElementById("popup-top").innerHTML = document.getElementById("popup-top").innerHTML.replace("%%EVENT_TITLE%%", event.title);
+      document.getElementById("popup-close").addEventListener("click", (e) => {
+        document.getElementById("popup").classList.add("hidden")
+      })
+      document.getElementById("popup").classList.remove("hidden");
+    })
   }
 };

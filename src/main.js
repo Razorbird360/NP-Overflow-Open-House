@@ -1,13 +1,14 @@
 // main.js
-import { gameState } from '/state/state.js';
-import { createScene, createGround } from '/scene/scene.js';
-import { setupPhysicsWorld, setupCharacterPhysics, updatePhysics, initPhysicalBodies } from '/physics/physics.js';
-import { initCharacter, characterMovement, isMoving } from '/scene/character.js';
-import { initAudio } from '/audio/audio.js';
-import { loadWorldObjects } from '/scene/objects.js';
-import { setupInputHandlers } from '/input.js';
+import {gameState} from '/state/state.js';
+import {createGround, createScene} from '/scene/scene.js';
+import {initPhysicalBodies, setupCharacterPhysics, setupPhysicsWorld, updatePhysics} from '/physics/physics.js';
+import {characterMovement, initCharacter, isMoving} from '/scene/character.js';
+import {initAudio} from '/audio/audio.js';
+import {loadWorldObjects} from '/scene/objects.js';
+import {setupInputHandlers} from '/input.js';
 import * as THREE from 'three';
-import { updateCamera } from './camera/camera';
+import {updateCamera} from './camera/camera';
+import {InteractionManager} from "three.interactive";
 
 gameState.keys.t = 1;
 async function init() {
@@ -23,7 +24,12 @@ async function init() {
   // Setup physics
   const { world, groundBody, groundMat } = setupPhysicsWorld();
   gameState.world = world;
-
+  gameState.interactive = new InteractionManager(
+    renderer,
+    camera,
+    renderer.domElement
+  );
+  
   const { characterBody, hitboxMesh } = setupCharacterPhysics(world, groundMat);
   gameState.characterBody = characterBody;
   // scene.add(hitboxMesh);
@@ -68,6 +74,9 @@ async function init() {
         characterMovement(deltaTime);
         updatePhysics(deltaTime, ground, groundBody, hitboxMesh);
       }
+      if (gameState.interactive) {
+        gameState.interactive.update();
+      } 
     }
   }
 

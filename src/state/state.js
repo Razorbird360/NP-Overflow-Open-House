@@ -16,7 +16,6 @@ export class GameState {
     this.objects = {
       fence: null,
       house: null,
-      workshops: null,
       golfball: null,
     };
     this.world = null;
@@ -25,6 +24,7 @@ export class GameState {
       walking: null,
       running: null,
     };
+    this.interactive = null;
   }
 }
 

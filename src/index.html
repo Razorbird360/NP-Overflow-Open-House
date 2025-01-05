@@ -8,7 +8,18 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <div id="popup" class="hidden"></div>
+    <div id="popup" class="hidden">
+        <div id="popup-top">
+            <div class="popup.title">%%EVENT_TITLE%%</div>
+            <div></div>
+            <button id="popup-close">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div id="popup-content"></div>
+    </div>
     <script type="module" src="main.js"></script>
 </body>
 </html>
