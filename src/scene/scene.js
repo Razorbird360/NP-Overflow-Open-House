@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { WebGPURenderer } from "three/webgpu";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { loadFlag } from "@/scene/objects.js";
+import { loadWorldObjects } from "@/scene/objects.js";
 
 export function createScene() {
   const scene = new THREE.Scene();
@@ -28,14 +27,19 @@ export function createScene() {
 
   const controls = new OrbitControls(camera, renderer.domElement);
 
+  // Add helper axes
   const axesHelper = new THREE.AxesHelper(5);
   scene.add(axesHelper);
 
+  // Add ambient light
   const ambientLight = new THREE.AmbientLight(0xffffff, 3);
   scene.add(ambientLight);
 
-  // golf flag
-  loadFlag(scene);
+  // Define player position (replace with dynamic positioning if necessary)
+  const playerPosition = { x: 0, y: 0, z: 0 };
+
+  // Load all world objects
+  loadWorldObjects(scene, playerPosition);
 
   return { scene, renderer, camera, listener, controls };
 }
@@ -46,6 +50,7 @@ export function createGround() {
   canvas.height = 1024;
   const ctx = canvas.getContext("2d");
 
+  // Create radial gradient for the ground
   const gradient = ctx.createRadialGradient(
     canvas.width / 2,
     canvas.height / 2,
@@ -54,19 +59,22 @@ export function createGround() {
     canvas.height / 2,
     canvas.width / 2
   );
-  gradient.addColorStop(0, "#5AC45A");
-  gradient.addColorStop(0.3, "#228B22");
+  gradient.addColorStop(0, "#5AC45A"); // Inner color
+  gradient.addColorStop(0.3, "#228B22"); // Outer color
 
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  const texture = new THREE.CanvasTexture(canvas);
 
+  // Create ground texture and geometry
+  const texture = new THREE.CanvasTexture(canvas);
   const planeGeometry = new THREE.PlaneGeometry(100, 100);
   const planeMaterial = new THREE.MeshBasicMaterial({
     map: texture,
     side: THREE.DoubleSide,
   });
   const ground = new THREE.Mesh(planeGeometry, planeMaterial);
+
+  // Rotate ground to be flat
   ground.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
 
   return ground;
