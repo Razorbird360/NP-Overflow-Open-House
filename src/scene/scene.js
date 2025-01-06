@@ -30,7 +30,7 @@ export function createScene() {
 
   // Add helper axes
   const axesHelper = new THREE.AxesHelper(5);
-  scene.add(axesHelper);
+  // scene.add(axesHelper);
 
   // Add ambient light
   const ambientLight = new THREE.AmbientLight(0xffffff, 1);
