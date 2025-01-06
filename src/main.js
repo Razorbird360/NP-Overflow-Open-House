@@ -9,6 +9,7 @@ import {setupInputHandlers} from '/input.js';
 import * as THREE from 'three';
 import {updateCamera} from './camera/camera';
 import {InteractionManager} from "three.interactive";
+import Stats from "three/examples/jsm/libs/stats.module.js"
 
 gameState.keys.t = 1;
 async function init() {
@@ -53,11 +54,13 @@ async function init() {
 
   //Resize window if needed
   window.addEventListener('resize', () => resize(renderer, camera));
+  const stats = new Stats();
+  document.body.appendChild(stats.dom)
 
   function animate() {
     requestAnimationFrame(animate);
 
-    const time = Date.now();
+    const time = performance.now();
     if (time - lastTime >= interval) {
       lastTime = time;
       controls.update();
@@ -80,6 +83,7 @@ async function init() {
       if (gameState.interactive) {
         gameState.interactive.update();
       } 
+      stats.update();
     }
   }
 
