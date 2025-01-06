@@ -11,17 +11,31 @@ An interactive 3d website made using Three.js, to show a portfolio-ish website t
 ### Install Libraries
 
 ```shell
+# Using npm
 npm install
+
+# Using pnpm
+pnpm install
+
+# Using bun
+bun install
 ```
 
-> This installs Three.js, Cannon-es, Vite, Vue for project environment & vite plugin to compile Vue files
+> This installs Three.js, Cannon.js, Vite, as dependencies that has been used. See package.json for the full list.
 
 ---
 
 ### Run project locally
 
 ```shell
+# Using npm
 npm run dev
+
+# Using pnpm
+pnpm dev
+
+# Using bun
+bun dev
 ```
 
 Alternatively, "npx vite" to run project, but it does not guarantee consistency with locally installed versions
@@ -30,7 +44,7 @@ Alternatively, "npx vite" to run project, but it does not guarantee consistency 
 
 ### Update project development pages
 
-CI has been setup to automatically update github pages on pushes
+GitHub Actions CI has been set up to automatically update build using bun and vite and upload to GitHub pages on pushes to the main branch.
 
 To push
 
@@ -39,10 +53,6 @@ git add .
 git commit -m "Your message here"
 git push
 ```
-
-To update github pages
-
----
 
 ### GLB/FBX Model sources
 
