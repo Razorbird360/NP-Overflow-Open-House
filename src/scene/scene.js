@@ -6,7 +6,7 @@ import { loadTrees } from "@/scene/trees.js";
 
 export function createScene() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x808080);
+  scene.background = new THREE.Color(0x87CEEB);
 
   const renderer = new WebGPURenderer({
     canvas: document.querySelector("#canvas"),
