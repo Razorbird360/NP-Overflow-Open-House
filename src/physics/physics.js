@@ -55,12 +55,12 @@ export function clampVelocity(body) {
   if (Math.abs(body.velocity.y) < 0.005) body.velocity.y = 0;
 }
 
-export function updatePhysics(deltaTime, ground, groundBody, hitboxMesh) {
+export function updatePhysics(deltaTime, ground, groundBody) {
   ground.position.copy(groundBody.position);
   ground.quaternion.copy(groundBody.quaternion);
 
-  hitboxMesh.position.copy(gameState.characterBody.position);
-  hitboxMesh.quaternion.copy(gameState.characterBody.quaternion);
+  // hitboxMesh.position.copy(gameState.characterBody.position);
+  // hitboxMesh.quaternion.copy(gameState.characterBody.quaternion);
 
   gameState.character.position.copy(gameState.characterBody.position);
   gameState.character.position.y -= 0.9;

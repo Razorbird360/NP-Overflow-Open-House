@@ -78,7 +78,7 @@ async function init() {
 
       if (gameState.character) {
         characterMovement(deltaTime);
-        updatePhysics(deltaTime, ground, groundBody, hitboxMesh);
+        updatePhysics(deltaTime, ground, groundBody);
       }
       if (gameState.interactive) {
         gameState.interactive.update();
