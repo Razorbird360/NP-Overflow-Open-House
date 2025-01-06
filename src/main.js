@@ -1,6 +1,6 @@
 // main.js
 import {gameState} from '/state/state.js';
-import {createGround, createScene} from '/scene/scene.js';
+import {createGround, createScene, resize} from '/scene/scene.js';
 import {initPhysicalBodies, setupCharacterPhysics, setupPhysicsWorld, updatePhysics} from '/physics/physics.js';
 import {characterMovement, initCharacter, isMoving} from '/scene/character.js';
 import {initAudio} from '/audio/audio.js';
@@ -50,6 +50,9 @@ async function init() {
   const fps = 60;
   const interval = 1000 / fps;
   let lastTime = 0;
+
+  //Resize window if needed
+  window.addEventListener('resize', () => resize(renderer, camera));
 
   function animate() {
     requestAnimationFrame(animate);

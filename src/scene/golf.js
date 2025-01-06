@@ -2,6 +2,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { gameState } from '@/state/state.js';
 import { BASE_PATH } from "@/utils/utils.js";
+import { castShadow } from '@/scene/scene.js';
+
 
 const fbxloader = new FBXLoader();
 const gltfloader = new GLTFLoader();
@@ -33,11 +35,13 @@ function dupFence(scene) {
     for (let i = 0; i < fenceCount; i++) {
         const fenceClone = gameState.objects.fence.clone();
         fenceClone.position.set(-i * spacing -10, 0, -3);
+        castShadow(fenceClone);
         scene.add(fenceClone);
     }
     for (let i = 0; i < fenceCount; i++) {
         const fenceClone = gameState.objects.fence.clone();
         fenceClone.position.set(-i * spacing -10, 0, 3);
+        castShadow(fenceClone);
         scene.add(fenceClone);
     }
 }

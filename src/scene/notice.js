@@ -3,6 +3,7 @@ import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader.js";
 import {BoxGeometry, LinearFilter, Mesh, MeshStandardMaterial, SRGBColorSpace, TextureLoader, Vector3} from "three";
 import * as CANNON from "cannon-es";
 import {gameState} from "@/state/state.js";
+import { castShadow } from '@/scene/scene.js';
 
 export const loadNotice = async (scene) => {
   const model = await new OBJLoader().loadAsync(`${BASE_PATH}world_objects/notice_board/model_1.obj`);
@@ -17,6 +18,7 @@ export const loadNotice = async (scene) => {
   model.traverse( function( child ) {
     if ( child instanceof Mesh ) {
       child.material = mesh;
+      castShadow(child);
     }
   });
   const body = new CANNON.Body({
@@ -42,5 +44,6 @@ export const loadNotice = async (scene) => {
   const box = new BoxGeometry(4, 2, 0.01)
   const notice = new Mesh(box, imageMesh)
   notice.position.set(0, 2.1, 9.9)
+  castShadow(notice);
   scene.add(notice)
 }

@@ -5,6 +5,7 @@ import { BASE_PATH } from "@/utils/utils.js";
 import { loadEvents } from "@/scene/events.js";
 import { loadNotice } from "@/scene/notice.js";
 import { loadGolf } from "@/scene/golf.js";
+import { castShadow } from "./scene";
 
 export function changeModelColor(model, color) {
   let hasChildren = false;
@@ -37,6 +38,7 @@ export async function loadWorldObjects(scene, playerPosition) {
     gameState.objects.house.position.set(-0.3, 0, -5);
     gameState.objects.house.rotation.y = -Math.PI / 2;
     gameState.objects.house.scale.set(2, 2, 2);
+    castShadow(gameState.objects.house);
     scene.add(gameState.objects.house);
   }
 
@@ -48,6 +50,7 @@ export async function loadWorldObjects(scene, playerPosition) {
     gameState.objects.golfball = golfballModel.scene || golfballModel;
     gameState.objects.golfball.position.set(-10, 0, 0);
     gameState.objects.golfball.scale.set(0.001, 0.001, 0.001);
+    castShadow(gameState.objects.golfball);
     scene.add(gameState.objects.golfball);
   }
 
@@ -79,7 +82,7 @@ export async function loadFlag(scene) {
     gameState.objects.ukFlag.scale.set(0.2, 0.2, 0.2);
     gameState.objects.ukFlag.position.set(-23, 0, 0); // Flag position
     gameState.objects.ukFlag.rotation.y = Math.PI / 2; // Rotate the flag
-
+    castShadow(gameState.objects.ukFlag);
     scene.add(gameState.objects.ukFlag);
     console.log("Golf flag loaded successfully!");
   } catch (error) {
@@ -139,6 +142,7 @@ export async function loadGolfAreaSign(scene, playerPosition) {
     const dz = playerPosition.z - leftSign.position.z;
       leftSign.rotation.y = Math.atan2(dx, dz);
     
+    castShadow(leftSign);
     scene.add(leftSign);
 
     // Load events area sign for the right sign
@@ -156,6 +160,7 @@ export async function loadGolfAreaSign(scene, playerPosition) {
     const rightDz = playerPosition.z - rightSign.position.z;
     rightSign.rotation.y = Math.atan2(rightDx, rightDz);
     
+    castShadow(rightSign);
     scene.add(rightSign);
 
     console.log("Golf area signs added successfully!");
