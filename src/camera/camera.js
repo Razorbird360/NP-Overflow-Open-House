@@ -34,16 +34,26 @@ function freeMoving(camera, controls, characterBody) {
     controls.update();
 }
 
-function firstPerson(camera, controls) {
-    controls.enabled = false;
-    const { x, y, z } = gameState.character.position;
-    camera.position.set(x, y + 3, z);
-    const quaternion = new THREE.Quaternion();
-    quaternion.setFromEuler(new THREE.Euler(0, gameState.character.rotation.y, 0));
-    const direction = new THREE.Vector3(0, 0, 1).applyQuaternion(quaternion);
-    const targetPosition = new THREE.Vector3( x + direction.x * 5, y + 3, z + direction.z * 5 );
-    camera.lookAt(targetPosition);
+
+function firstPerson(camera, controls, characterBody) {
+    controls.enabled = true;
+    let { x, y, z } = characterBody.position;
+    camera.position.set(x , y + 1, z);
+    const direction = new THREE.Vector3(
+        Math.sin(gameState.character.rotation.y),
+        0,
+        Math.cos(gameState.character.rotation.y)
+    );
+    const cameraOffset = 5; 
+    const targetX = x + direction.x * cameraOffset;
+    const targetZ = z + direction.z * cameraOffset;
+    const targetY = y + 1
+    controls.target.set(targetX, targetY, targetZ);
     camera.updateMatrixWorld();
     controls.update();
 }
+
+
+
+
 
