@@ -62,3 +62,4 @@ git push
 [Chinese Bulletin Board](https://sketchfab.com/3d-models/chinese-bulletin-board-9fe2f9f41b984fa28d93608e9eacf900)  
 [Trees Pack](https://www.cgtrader.com/free-3d-models/plant/leaf/low-poly-plant-set)  
 [Soccer Ball](https://www.cgtrader.com/free-3d-models/sports/equipment/soccer-ball-7178d845-f73e-4a03-abb7-e95a2819779d) 
+[Dice Models](https://www.cgtrader.com/items/3142007/download-page)  

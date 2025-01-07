@@ -19,6 +19,7 @@ export async function loadSoccer(scene) {
     await loadFence();
     dupFence(scene);
     await loadSoccerBall(scene);
+    await loadDice(scene);
 }
 
 async function loadFence() {
@@ -73,4 +74,31 @@ async function loadSoccerBall(scene) {
         );
       }
     );
-  }
+}
+
+async function loadDice(scene) {
+    const diceModel1 = await gltfloader.loadAsync(
+        `${BASE_PATH}world_objects/dice1.glb`
+    );
+    const diceModel2 = await gltfloader.loadAsync(
+        `${BASE_PATH}world_objects/dice2.glb`
+    );
+    const diceModel3 = await gltfloader.loadAsync(
+        `${BASE_PATH}world_objects/dice3.glb`
+    );
+  gameState.dice1 = diceModel1.scene || diceModel1;
+  gameState.dice2 = diceModel2.scene || diceModel2;
+  gameState.dice3 = diceModel3.scene || diceModel3;
+  gameState.dice1.position.set(-5, -1000, 0);
+  gameState.dice2.position.set(0, -1000, 0);
+  gameState.dice3.position.set(5, -1000, 0);
+  gameState.dice1.scale.set(0.85, 0.85, 0.85);
+  gameState.dice2.scale.set(0.85, 0.85, 0.85);
+  gameState.dice3.scale.set(0.85, 0.85, 0.85);
+  castShadow(gameState.dice1);
+  castShadow(gameState.dice2);
+  castShadow(gameState.dice3);
+  scene.add(gameState.dice1);
+  scene.add(gameState.dice2);
+  scene.add(gameState.dice3);
+}
