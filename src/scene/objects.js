@@ -4,8 +4,8 @@ import { gameState } from "@/state/state.js";
 import { BASE_PATH } from "@/utils/utils.js";
 import { loadEvents } from "@/scene/events.js";
 import { loadNotice } from "@/scene/notice.js";
-import { loadGolf } from "@/scene/golf.js";
-import { castShadow } from "./scene";
+import { loadSoccer } from "@/scene/soccer.js";
+import { castShadow } from "@/scene/scene.js";
 
 export function changeModelColor(model, color) {
   let hasChildren = false;
@@ -42,20 +42,6 @@ export async function loadWorldObjects(scene, playerPosition) {
     scene.add(gameState.objects.house);
   }
 
-  // Load golf ball
-  if (!gameState.objects.golfball) {
-    const golfballModel = await fbxloader.loadAsync(
-      `${BASE_PATH}world_objects/golf_ball.fbx`
-    );
-    gameState.objects.golfball = golfballModel.scene || golfballModel;
-    gameState.objects.golfball.position.set(-10, 0, 0);
-    gameState.objects.golfball.scale.set(0.001, 0.001, 0.001);
-    castShadow(gameState.objects.golfball);
-    scene.add(gameState.objects.golfball);
-  }
-
-  // Load golf flag
-  await loadFlag(scene);
 
   // Load grass
   await loadGrass(scene);
@@ -66,29 +52,11 @@ export async function loadWorldObjects(scene, playerPosition) {
   // Load additional objects
   const workshopsModel = await loadEvents(scene);
   const bulletin = await loadNotice(scene);
-  const golf = await loadGolf(scene);
+  const soccer = await loadSoccer(scene);
 
   gameState.loadedObjects = true;
 }
 
-// Load golf flag
-export async function loadFlag(scene) {
-  const gltfloader = new GLTFLoader();
-  try {
-    const flagModel = await gltfloader.loadAsync(
-      `${BASE_PATH}world_objects/golf_flag.glb`
-    );
-    gameState.objects.ukFlag = flagModel.scene || flagModel;
-    gameState.objects.ukFlag.scale.set(0.2, 0.2, 0.2);
-    gameState.objects.ukFlag.position.set(-23, 0, 0); // Flag position
-    gameState.objects.ukFlag.rotation.y = Math.PI / 2; // Rotate the flag
-    castShadow(gameState.objects.ukFlag);
-    scene.add(gameState.objects.ukFlag);
-    console.log("Golf flag loaded successfully!");
-  } catch (error) {
-    console.error("Error loading golf flag:", error);
-  }
-}
 
 // Load grass
 export async function loadGrass(scene) {
@@ -162,9 +130,6 @@ export async function loadGolfAreaSign(scene, playerPosition) {
     
     castShadow(rightSign);
     scene.add(rightSign);
-
-    console.log("Golf area signs added successfully!");
-  } catch (error) {
-    console.error("Error loading golf area sign:", error);
+  } catch {
   }
 }

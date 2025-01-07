@@ -86,4 +86,5 @@ export function initPhysicalBodies(scene, world) {
   });
   world.addBody(houseBoxBody);
 
+  
 }

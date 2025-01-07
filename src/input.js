@@ -1,4 +1,3 @@
-// input.js
 import { gameState } from './state/state.js';
 
 export function setupInputHandlers() {
