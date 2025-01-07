@@ -13,6 +13,7 @@ export function setupPhysicsWorld() {
     type: CANNON.Body.STATIC,
     material: groundMat
   });
+  gameState.groundBody = groundBody;
   groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
   world.addBody(groundBody);
 
@@ -59,6 +60,9 @@ export function updatePhysics(deltaTime, ground, groundBody, soccerBall, soccerB
   ground.position.copy(groundBody.position);
   ground.quaternion.copy(groundBody.quaternion);
 
+  // hitboxMesh.position.copy(gameState.characterBody.position);
+  // hitboxMesh.quaternion.copy(gameState.characterBody.quaternion);
+
   soccerBall.position.copy(soccerBallBody.position);
   soccerBall.quaternion.copy(soccerBallBody.quaternion);
 
@@ -86,6 +90,44 @@ export function initPhysicalBodies(scene, world) {
   });
   world.addBody(houseBoxBody);
 
+  const soccerBallBody = new CANNON.Body({
+    mass: 50,
+    position: new CANNON.Vec3(-10, 3, 0),
+    shape: new CANNON.Sphere(0.8),
+  });
+  world.addBody(soccerBallBody);
+  gameState.soccerBallBody = soccerBallBody;
 
+  const groundMaterial = new CANNON.Material();
+  const ballMaterial = new CANNON.Material();
+  // const groundBody = gameState.groundBody;
+  // soccerBallBody.material = ballMaterial;
+  // groundBody.material = groundMaterial;
+  // const contactMaterial = new CANNON.ContactMaterial(groundMaterial, ballMaterial, {
+  //   friction: 0,
+  //   restitution: 0,
+  // });
+  soccerBallBody.linearDamping = 0.9;
 
+  addFenceBody(world);
+}
+
+function addFenceBody(world) {
+  const length = 14.5;
+  const width = 0.3;
+
+  const fenceShape = new CANNON.Box(new CANNON.Vec3(length / 2, 2, width / 2));
+  const fenceBody = new CANNON.Body({
+      mass: 0,
+      position: new CANNON.Vec3(-16, 1, 3)
+  });
+  fenceBody.addShape(fenceShape);
+  world.addBody(fenceBody);
+
+  const otherFence = new CANNON.Body({
+    mass: 0,
+    position: new CANNON.Vec3(-16, 1, -3)
+  });
+  otherFence.addShape(fenceShape);
+  world.addBody(otherFence);
 }

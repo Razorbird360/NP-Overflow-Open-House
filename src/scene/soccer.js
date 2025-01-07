@@ -66,14 +66,9 @@ async function loadSoccerBall(scene) {
           `${BASE_PATH}world_objects/soccer/soccerBall.obj`,
           function (soccerBall) {
             gameState.soccerBall = soccerBall;
-            const soccerBallBody = new CANNON.Body({
-                mass: 1,
-                position: new CANNON.Vec3(-10, 3, 0),
-                shape: new CANNON.Sphere(0.8),
-              });
-              gameState.soccerBallBody = soccerBallBody;
-              gameState.soccerBall.position.set(-10, 0.5, 0);
-              scene.add(gameState.soccerBall);
+            gameState.soccerBall.position.set(0, -1000, 0);
+            castShadow(gameState.soccerBall);
+            scene.add(gameState.soccerBall);
           }
         );
       }
