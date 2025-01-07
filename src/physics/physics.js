@@ -55,12 +55,12 @@ export function clampVelocity(body) {
   if (Math.abs(body.velocity.y) < 0.005) body.velocity.y = 0;
 }
 
-export function updatePhysics(deltaTime, ground, groundBody) {
+export function updatePhysics(deltaTime, ground, groundBody, soccerBall, soccerBallBody) {
   ground.position.copy(groundBody.position);
   ground.quaternion.copy(groundBody.quaternion);
 
-  // hitboxMesh.position.copy(gameState.characterBody.position);
-  // hitboxMesh.quaternion.copy(gameState.characterBody.quaternion);
+  soccerBall.position.copy(soccerBallBody.position);
+  soccerBall.quaternion.copy(soccerBallBody.quaternion);
 
   gameState.character.position.copy(gameState.characterBody.position);
   gameState.character.position.y -= 0.9;
@@ -86,5 +86,6 @@ export function initPhysicalBodies(scene, world) {
   });
   world.addBody(houseBoxBody);
 
-  
+
+
 }

@@ -78,7 +78,7 @@ async function init() {
 
       if (gameState.character) {
         characterMovement(deltaTime);
-        updatePhysics(deltaTime, ground, groundBody);
+        updatePhysics(deltaTime, ground, groundBody, gameState.soccerBall, gameState.soccerBallBody);
       }
       if (gameState.interactive) {
         gameState.interactive.update();
