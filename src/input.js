@@ -1,4 +1,5 @@
 import { gameState } from './state/state.js';
+import { resetAll } from './physics/physics.js';
 
 export function setupInputHandlers() {
   window.addEventListener('keydown', onKeyDown);
@@ -17,7 +18,8 @@ function onKeyDown(event) {
     shift: () => { gameState.keys.shift = true; },
     t: () => {
       gameState.keys.t = gameState.keys.t === 3 ? 1 : (gameState.keys.t || 1) + 1;
-    }
+    },
+    r: () => { resetAll(); }
   };
 
   const action = keyActions[event.key.toLowerCase()];

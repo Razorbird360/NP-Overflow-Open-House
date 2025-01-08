@@ -63,8 +63,8 @@
 }
 .controls_box {
     width: 15vw;
-    height: 15vh;
-    background-color: lightblue;
+    height: 18vh;
+    background-color: rgb(18, 22, 24);
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -72,4 +72,7 @@
     position: fixed;
     bottom: 0;
     right: 0;
+}
+.controls_box p{
+    color: white;
 }

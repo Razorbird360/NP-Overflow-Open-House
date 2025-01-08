@@ -169,3 +169,25 @@ function addDiceBody(world) {
   world.addBody(diceBody3);
   gameState.diceBody3 = diceBody3;
 }
+
+export function resetAll() {
+  gameState.characterBody.position.set(0, 1.5, 0);
+  gameState.characterBody.velocity.set(0, 0, 0);
+  gameState.characterBody.angularVelocity.set(0, 0, 0);
+
+  gameState.soccerBallBody.position.set(-10, 3, 0);
+  gameState.soccerBallBody.velocity.set(0, 0, 0);
+  gameState.soccerBallBody.angularVelocity.set(0, 0, 0);
+
+  gameState.diceBody1.position.set(-22, 0.75, -1);
+  gameState.diceBody1.velocity.set(0, 0, 0);
+  gameState.diceBody1.angularVelocity.set(0, 0, 0);
+
+  gameState.diceBody2.position.set(-22, 2.5, 0);
+  gameState.diceBody2.velocity.set(0, 0, 0);
+  gameState.diceBody2.angularVelocity.set(0, 0, 0);
+
+  gameState.diceBody3.position.set(-22, 0.75, 1);
+  gameState.diceBody3.velocity.set(0, 0, 0);
+  gameState.diceBody3.angularVelocity.set(0, 0, 0);
+}

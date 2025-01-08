@@ -133,3 +133,4 @@ export async function loadGolfAreaSign(scene, playerPosition) {
   } catch {
   }
 }
+
