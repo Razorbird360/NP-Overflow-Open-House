@@ -26,7 +26,7 @@ export const loadNotice = async (scene) => {
   })
 
 
-  body.addShape(new CANNON.Box(new CANNON.Vec3(5, 5, 2)))
+  body.addShape(new CANNON.Box(new CANNON.Vec3(2.8, 5, 0.5)))
 
   gameState.world !== null ? gameState.world.addBody(body) : null
     model.scale.divideScalar(30) // all hardcoded lol gl
