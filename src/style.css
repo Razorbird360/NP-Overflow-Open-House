@@ -61,3 +61,15 @@
     display: none;
     visibility: hidden;
 }
+.controls_box {
+    width: 15vw;
+    height: 15vh;
+    background-color: lightblue;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
