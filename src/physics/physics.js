@@ -50,6 +50,37 @@ export function setupCharacterPhysics(world, groundMat) {
   return { characterBody, hitboxMesh };
 }
 
+export function createBorders(world) {
+  const leftBorder = new CANNON.Body({
+    mass: 0,
+    shape: new CANNON.Box(new CANNON.Vec3(0.1, 100, 100)),
+  });
+  leftBorder.position.set(-50, 50, 0);
+  world.addBody(leftBorder);
+
+  const rightBorder = new CANNON.Body({
+    mass: 0,
+    shape: new CANNON.Box(new CANNON.Vec3(0.1, 100, 100)),
+  });
+  rightBorder.position.set(50, 50, 0);
+  world.addBody(rightBorder);
+
+  const backBorder = new CANNON.Body({
+    mass: 0,
+    shape: new CANNON.Box(new CANNON.Vec3(100, 100, 0.1)),
+  });
+  backBorder.position.set(0, 50, -50);
+  world.addBody(backBorder);
+  
+  const frontBorder = new CANNON.Body({
+    mass: 0,
+    shape: new CANNON.Box(new CANNON.Vec3(100, 100, 0.1)),
+  });
+  frontBorder.position.set(0, 50, 50);
+  world.addBody(frontBorder);
+  
+}
+
 export function clampVelocity(body) {
   if (Math.abs(body.velocity.x) < 0.005) body.velocity.x = 0;
   if (Math.abs(body.velocity.z) < 0.005) body.velocity.z = 0;

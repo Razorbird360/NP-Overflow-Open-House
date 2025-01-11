@@ -1,7 +1,7 @@
 // main.js
 import {gameState} from '/state/state.js';
 import {createGround, createScene, resize} from '/scene/scene.js';
-import {initPhysicalBodies, setupCharacterPhysics, setupPhysicsWorld, updatePhysics} from '/physics/physics.js';
+import {initPhysicalBodies, setupCharacterPhysics, setupPhysicsWorld, updatePhysics, createBorders} from '/physics/physics.js';
 import {characterMovement, initCharacter, isMoving} from '/scene/character.js';
 import {initAudio} from '/audio/audio.js';
 import {loadWorldObjects} from '/scene/objects.js';
@@ -40,7 +40,8 @@ async function init() {
     initCharacter(scene),
     initAudio(listener),
     loadWorldObjects(scene),
-    initPhysicalBodies(scene, world)
+    initPhysicalBodies(scene, world),
+    createBorders(world)
   ]);
 
   // Setup input handlers
