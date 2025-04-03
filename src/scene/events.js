@@ -1,94 +1,131 @@
 import {
   BoxGeometry,
+  CylinderGeometry,
+  Group,
   LinearFilter,
   Mesh,
-  MeshBasicMaterial,
   MeshStandardMaterial,
-  PlaneGeometry,
   SRGBColorSpace,
-  TextureLoader
+  TextureLoader,
+  FrontSide
 } from "three";
 import { BASE_PATH } from "@/utils/utils.js";
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import events from "@/public/posts.json";
 import { FontLoader } from "three/addons";
 import { gameState } from "@/state/state.js";
+import { castShadow } from '@/scene/scene.js';
 
 export const loadEvents = async (scene) => {
-  const initialPosition = { x: 15, y: 2, z: -1 };
+  const initialPosition = { x: 15, y: 0, z: -1 };
+  const spacingZ = -5;
   const sortedEvents = events.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const loadFont = (path) =>
     new Promise((resolve, reject) => {
       const loader = new FontLoader();
-      loader.load(
-        path,
-        (font) => resolve(font),
-        undefined,
-        (error) => reject(error)
-      );
+      loader.load(path, resolve, undefined, reject);
     });
 
   const loadTexture = (path) =>
     new Promise((resolve, reject) => {
       const loader = new TextureLoader();
-      loader.load(
-        path,
-        (texture) => resolve(texture),
-        undefined,
-        (error) => reject(error)
-      );
+      loader.load(path, resolve, undefined, reject);
     });
 
-  for (let i = 0; i < sortedEvents.length; i++) {
-    const event = sortedEvents[i];
+  const standHeight = 1.5;
+  const standRadius = 0.05;
+  const baseHeight = 0.1;
+  const baseRadius = 0.3;
+  const standMaterial = new MeshStandardMaterial({ color: 0x654321, roughness: 0.8, metalness: 0.2 });
 
-    try {
-      const font = await loadFont(`${BASE_PATH}Roboto_Regular.json`);
-      const geometry = new TextGeometry(event.title, { font, size: 0.25, depth: 0.01 });
-      geometry.computeBoundingBox();
+  const backgroundDepth = 0.1;
+  const backgroundMaterial = new MeshStandardMaterial({ color: 0x222222, roughness: 0.9 });
 
-      const textWidth = geometry.boundingBox.max.x - geometry.boundingBox.min.x;
-      const textHeight = geometry.boundingBox.max.y - geometry.boundingBox.min.y;
+  const textMaterial = new MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 });
 
-      const padding = 0.4; 
-      const overallWidth = Math.max(textWidth, 4) + padding;
-      const overallHeight = textHeight + 3.2 + padding;
+  const imageWidth = 4;
+  const imageHeight = 3;
+  const imageDepth = 0.05;
+  const imageBackingMaterial = new MeshStandardMaterial({ color: 0x333333 });
 
-      const bgGeometry = new PlaneGeometry(overallWidth, overallHeight);
-      const bgMaterial = new MeshBasicMaterial({ color: 0x000000 });
-      const background = new Mesh(bgGeometry, bgMaterial);
-      background.position.set(initialPosition.x - 0.5, initialPosition.y + 1, initialPosition.z + (-5 * i) - 0.05);
+  try {
+    const font = await loadFont(`${BASE_PATH}Roboto_Regular.json`);
 
-      const textMaterial = new MeshBasicMaterial({ color: 0xffffff });
-      const text = new Mesh(geometry, textMaterial);
+    for (let i = 0; i < sortedEvents.length; i++) {
+      const event = sortedEvents[i];
+      const eventGroup = new Group();
 
-      text.position.set(
-        background.position.x - textWidth / 2, 
-        background.position.y + overallHeight / 2 - textHeight / 2 - 0.2, 
-        background.position.z + 0.01 
-      );
+      const postGeo = new CylinderGeometry(standRadius, standRadius, standHeight, 16);
+      const postMesh = new Mesh(postGeo, standMaterial);
+      postMesh.position.y = standHeight / 2 + baseHeight;
+
+      const baseGeo = new CylinderGeometry(baseRadius, baseRadius, baseHeight, 16);
+      const baseMesh = new Mesh(baseGeo, standMaterial);
+      baseMesh.position.y = baseHeight / 2;
+
+      eventGroup.add(postMesh);
+      eventGroup.add(baseMesh);
+
+      const textGeo = new TextGeometry(event.title, { font, size: 0.25, depth: 0.01 });
+      textGeo.computeBoundingBox();
+      const textWidth = textGeo.boundingBox.max.x - textGeo.boundingBox.min.x;
+      const textHeight = textGeo.boundingBox.max.y - textGeo.boundingBox.min.y;
+
+      const padding = 0.4;
+      const overallWidth = Math.max(textWidth, imageWidth) + padding;
+      const spaceBetweenTextAndImage = 0.2;
+      const overallHeight = textHeight + imageHeight + spaceBetweenTextAndImage + padding * 2;
+
+      const bgGeometry = new BoxGeometry(overallWidth, overallHeight, backgroundDepth);
+      const backgroundMesh = new Mesh(bgGeometry, backgroundMaterial);
+      backgroundMesh.position.y = standHeight + baseHeight + overallHeight / 2;
+      backgroundMesh.position.z = 0;
+      eventGroup.add(backgroundMesh);
+
+      const textMesh = new Mesh(textGeo, textMaterial);
+      textMesh.position.x = -textWidth / 2;
+      textMesh.position.y = backgroundMesh.position.y + overallHeight / 2 - textHeight - padding;
+      textMesh.position.z = backgroundDepth / 2 + 0.01;
+      eventGroup.add(textMesh);
 
       const texture = await loadTexture(`${BASE_PATH}images/${event.image}`);
       texture.colorSpace = SRGBColorSpace;
       texture.minFilter = LinearFilter;
+      texture.magFilter = LinearFilter;
 
-      const imageGeometry = new BoxGeometry(4, 3, 0.01);
-      const imageMaterial = new MeshStandardMaterial({ map: texture });
-      const image = new Mesh(imageGeometry, imageMaterial);
-      image.position.set(
-        background.position.x,
-        background.position.y - overallHeight / 2 + 1.6,
-        background.position.z + 0.02
+      const imageMaterialWithTexture = new MeshStandardMaterial({ map: texture, side: FrontSide });
+
+      const imageMaterials = [
+        imageBackingMaterial,
+        imageBackingMaterial,
+        imageBackingMaterial,
+        imageBackingMaterial,
+        imageMaterialWithTexture,
+        imageBackingMaterial,
+      ];
+
+      const imageGeometry = new BoxGeometry(imageWidth, imageHeight, imageDepth);
+      const imageMesh = new Mesh(imageGeometry, imageMaterials);
+
+      imageMesh.position.x = 0;
+      imageMesh.position.y = backgroundMesh.position.y - overallHeight / 2 + imageHeight / 2 + padding;
+      imageMesh.position.z = backgroundDepth / 2 + 0.01;
+
+      eventGroup.add(imageMesh);
+
+      eventGroup.position.set(
+        initialPosition.x,
+        initialPosition.y,
+        initialPosition.z + i * spacingZ
       );
+      scene.add(eventGroup);
+      castShadow(eventGroup);
 
-      scene.add(background);
-      scene.add(text);
-      scene.add(image);
-      gameState.interactive.add(image);
+      imageMesh.userData = { event };
+      gameState.interactive.add(imageMesh);
 
-      image.userData = { event };
-      image.addEventListener("click", () => {
+      imageMesh.addEventListener("click", () => {
         document.getElementById("popup-content").innerHTML = `
           <div id="popup-info">
             <img width="480px" src="${BASE_PATH}images/${event.image}" alt="${event.title}" />
@@ -96,13 +133,21 @@ export const loadEvents = async (scene) => {
           </div>
         `;
         document.getElementById("popup-title").innerText = event.title;
-        document.getElementById("popup-close").addEventListener("click", () => {
-          document.getElementById("popup").classList.add("hidden");
-        });
-        document.getElementById("popup").classList.remove("hidden");
+        const popup = document.getElementById("popup");
+        const closeButton = document.getElementById("popup-close");
+
+        const newCloseButton = closeButton.cloneNode(true);
+        closeButton.parentNode.replaceChild(newCloseButton, closeButton);
+
+        newCloseButton.addEventListener("click", () => {
+          popup.classList.add("hidden");
+        }, { once: true });
+
+        popup.classList.remove("hidden");
       });
-    } catch (error) {
-      console.error(`Error loading resources for event "${event.title}":`, error);
+
     }
+  } catch (error) {
+    console.error(`Error loading event resources:`, error);
   }
 };
