@@ -70,7 +70,7 @@ async function init() {
       const deltaTime = clock.getDelta();
 
       
-      updateCamera(camera, controls, gameState.characterBody, isMoving());
+      updateCamera(camera, controls, gameState.characterBody, gameState.character);
       
 
       if (gameState.mixer) {

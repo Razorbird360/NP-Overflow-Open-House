@@ -116,54 +116,78 @@ export function move(speed, deltaTime) {
   );
 }
 
+
+function handleRunningSound() {
+  if (gameState.sounds.walking.isPlaying) gameState.sounds.walking.stop();
+  if (!gameState.sounds.running.isPlaying) gameState.sounds.running.play();
+}
+
+function handleWalkingSound() {
+  if (gameState.sounds.running.isPlaying) gameState.sounds.running.stop();
+  if (!gameState.sounds.walking.isPlaying) gameState.sounds.walking.play();
+}
+
+function stopMovementSounds() {
+  if (gameState.sounds.walking.isPlaying) gameState.sounds.walking.stop();
+  if (gameState.sounds.running.isPlaying) gameState.sounds.running.stop();
+}
+
 export function characterMovement(deltaTime) {
-
-  if (gameState.keys.w) {
-    face('front');
-  }
-  else if (gameState.keys.a) {
-    face('left');
-  }
-  else if (gameState.keys.s) {
-    face('back');
-  }
-  else if (gameState.keys.d) {
-    face('right');
-  }
-
   const walkingSpeed = 150;
   const runningSpeed = 300;
+  const backwardSpeed = 75;
+  const turnSpeed = 3;
 
-  if (gameState.keys.shift) {
+  if (gameState.keys.space) {
+    if (gameState.currentAction !== gameState.animations.dance) {
+      gameState.dancing = true;
+      playAnimation("dance");
+      if (gameState.sounds.dance) {
+        fadeInDance(gameState.sounds.dance, 0.2, 500); // 0.5 sec to fade in
+      }
+    }
+    stopMovementSounds();
+    gameState.characterBody.velocity.x = 0;
+    gameState.characterBody.velocity.z = 0;
+    return;
+  } else {
+    if (gameState.sounds.dance && gameState.sounds.dance.isPlaying) {
+      fadeOutDance(gameState.sounds.dance, 1000); // 1 sec to fade out
+    }
+    gameState.dancing = false;
+  }
+
+  if (!gameState.dancing) {
+    if (gameState.keys.a) gameState.character.rotation.y += turnSpeed * deltaTime;
+    if (gameState.keys.d) gameState.character.rotation.y -= turnSpeed * deltaTime;
+  }
+
+  if (gameState.keys.shift && gameState.keys.w) {
     move(runningSpeed, deltaTime);
     playAnimation("run");
-    if (gameState.sounds.walking.isPlaying) {
-      gameState.sounds.walking.stop();
-    }
-    if (!gameState.sounds.running.isPlaying) {
-      gameState.sounds.running.play();
-    }
-    return;
-  }
-
-  if (gameState.keys.w || gameState.keys.a || gameState.keys.s || gameState.keys.d) {
+    handleRunningSound();
+  } else if (gameState.keys.w) {
     move(walkingSpeed, deltaTime);
     playAnimation("walk");
-    if (gameState.sounds.running.isPlaying) {
-      gameState.sounds.running.stop();
+    handleWalkingSound();
+  } else if (gameState.keys.s) {
+    move(-backwardSpeed, deltaTime);
+    playAnimation("bwalk");
+    handleWalkingSound();
+  } else if (gameState.keys.a || gameState.keys.d) {
+    if (gameState.currentAction !== gameState.animations.walk) {
+      playAnimation("walk");
     }
-    if (!gameState.sounds.walking.isPlaying) {
-      gameState.sounds.walking.play();
-    }
-    return;
-  }
-
-  playAnimation("idle");
-  if (gameState.sounds.walking.isPlaying || gameState.sounds.running.isPlaying) {
-    gameState.sounds.walking.stop();
-    gameState.sounds.running.stop();
+    // A minimal movement when only turning.
+    move(0.1, deltaTime);
+  } else {
+    playAnimation("idle");
+    stopMovementSounds();
+    gameState.characterBody.velocity.x = 0;
+    gameState.characterBody.velocity.z = 0;
   }
 }
+
 
 export async function initCharacter(scene) {
   const gltfloader = new GLTFLoader();

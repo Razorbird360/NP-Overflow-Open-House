@@ -1,24 +1,18 @@
 import { gameState } from '@/state/state.js';
 import * as THREE from 'three';
-export function updateCamera(camera, controls, characterBody, isMoving) {
-    // console.log(gameState.keys.t);
-    switch (gameState.keys.t) {
-        case 1:
-            if (!isMoving) {
-                controls.enabled = true;
-            } else {
-
-                thirdPerson(camera, controls, characterBody);
-            }
-            break;
-        case 2:
-            freeMoving(camera, controls, characterBody);
-            break;
-        case 3:
-            firstPerson(camera, controls, characterBody);
-            break;
-    }
+export function updateCamera(camera, controls, characterBody, character) {
+  // console.log(gameState.keys.t);
+  switch (gameState.keys.t) {
+      case 1:
+          thirdPerson(camera, controls, characterBody, character);
+          break;
+      case 2:
+          firstPerson(camera, controls, characterBody, character);
+          break;
+  }
 }
+
+
 function thirdPerson(camera, controls, characterBody) {
     controls.enabled = false;
     let { x, y, z } = characterBody.position;

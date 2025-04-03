@@ -17,7 +17,7 @@ function onKeyDown(event) {
     d: () => { gameState.keys.d = true; },
     shift: () => { gameState.keys.shift = true; },
     t: () => {
-      gameState.keys.t = gameState.keys.t === 3 ? 1 : (gameState.keys.t || 1) + 1;
+      gameState.keys.t = gameState.keys.t === 1 ? 2 : 1;
     },
     r: () => { resetAll(); }
   };
