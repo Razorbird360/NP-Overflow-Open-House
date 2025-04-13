@@ -81,7 +81,8 @@ export function playAnimation(event) {
   const animationMap = {
     idle: gameState.animations.idle,
     walk: gameState.animations.walk,
-    run: gameState.animations.run
+    run: gameState.animations.run,
+    bwalk: gameState.animations.bwalk
   };
 
   const targetAction = animationMap[event];
@@ -201,7 +202,7 @@ export async function initCharacter(scene) {
   gameState.mixer = new THREE.AnimationMixer(gameState.character);
   const clips = leonard.animations;
 
-  const animationNames = ['idle', 'run', 'turnleft', 'turnright', 'walk'];
+  const animationNames = ['idle', 'run', 'walk', 'bwalk'];
   animationNames.forEach(name => {
     gameState.animations[name] = gameState.mixer.clipAction(
       THREE.AnimationClip.findByName(clips, name)
